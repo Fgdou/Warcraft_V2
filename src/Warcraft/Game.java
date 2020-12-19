@@ -13,19 +13,19 @@ public class Game {
 	private Level level;
 	private int TICK_RATE = 60;
 
-	private Input input;
+	private InputHandler inputHandler;
 
 	private boolean running;
 
 	public Game(){
 		screen = new Screen(new Vec2i(1280, 720), 20);
-		input = new Input(screen);
-		level = new Level(screen, input, null, null);
+		inputHandler = new InputHandler(screen);
+		level = new Level(screen, inputHandler, null, null);
 		running = true;
 	}
 
 	public void tick(){
-		input.tick();
+		inputHandler.tick();
 		level.tick();
 	}
 	public void draw(){

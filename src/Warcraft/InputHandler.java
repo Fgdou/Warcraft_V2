@@ -6,7 +6,7 @@ import Warcraft.tools.Vec2;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class Input {
+public class InputHandler {
     private Set<Character> keyboard;
     private Vec2 mouse;
     private Screen screen;
@@ -14,7 +14,7 @@ public class Input {
     private boolean mousePressed;
     private boolean mouseClicked;
 
-    public Input(Screen s){
+    public InputHandler(Screen s){
         keyboard = new TreeSet<>();
         mouse = new Vec2(0,0);
         this.screen = s;

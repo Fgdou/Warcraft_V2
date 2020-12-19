@@ -1,6 +1,6 @@
 package Warcraft.level;
 
-import Warcraft.Input;
+import Warcraft.InputHandler;
 import Warcraft.entities.monsters.Monster;
 import Warcraft.entities.projectiles.Projectile;
 import Warcraft.entities.towers.Tower;
@@ -16,7 +16,7 @@ public class Level {
 	private Path path;
 	private List<Wave> waves;
 	private Screen screen;
-	private Input input;
+	private InputHandler inputHandler;
 
 	private int[][] tiles;
 	private List<Monster> monsters;
@@ -27,11 +27,11 @@ public class Level {
 	private int tickSpeed;
 	private boolean ended;
 	
-	public Level(Screen screen, Input input, Path path, List<Wave> waves){
+	public Level(Screen screen, InputHandler inputHandler, Path path, List<Wave> waves){
 		this.screen = screen;
 		this.path = path;
 		this.waves = waves;
-		this.input = input;
+		this.inputHandler = inputHandler;
 
 		tiles = new int[screen.getnTiles().y][screen.getnTiles().x];
 		monsters = new LinkedList<>();
