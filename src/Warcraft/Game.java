@@ -1,5 +1,7 @@
 package Warcraft;
 
+import Warcraft.entities.monsters.Zombie;
+import Warcraft.entities.towers.TowerArcher1;
 import Warcraft.fx.Screen;
 import Warcraft.level.Level;
 import Warcraft.level.PathRandom;
@@ -23,6 +25,9 @@ public class Game {
 		inputHandler = new InputHandler(screen);
 		level = new Level(screen, inputHandler, new PathRandom(screen.getnTiles(), new Vec2i(1,1)), null);
 		running = true;
+
+		level.addEntity(new Zombie(new Vec2(level.getSpawn())));
+		level.addEntity(new TowerArcher1(new Vec2(level.getSpawn())));
 	}
 
 	public void tick(){

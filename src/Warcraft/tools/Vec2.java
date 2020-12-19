@@ -76,4 +76,9 @@ public class Vec2 {
 	public String toString(){
 		return "{" + x + "," + y + "}";
 	}
+
+    public double getAngle() {
+		//TODO
+		return 0;
+    }
 }

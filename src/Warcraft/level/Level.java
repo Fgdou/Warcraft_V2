@@ -155,7 +155,6 @@ public class Level {
 		else
 			throw new RuntimeException("e not found");
 	}
-
 	public void drawBackground(){
 		for(int i=0; i<screen.getnTiles().y; i++){
 			for(int j=0; j<screen.getnTiles().x; j++){
@@ -173,5 +172,25 @@ public class Level {
 		}
 		Texture.CASTLE.draw(screen, new Vec2(castle), 1, 0);
 		Texture.SPAWN.draw(screen, new Vec2(spawn), 1, 0);
+	}
+
+
+	public PathRandom getPath() {
+		return path;
+	}
+	public List<Wave> getWaves() {
+		return waves;
+	}
+	public Screen getScreen() {
+		return screen;
+	}
+	public InputHandler getInputHandler() {
+		return inputHandler;
+	}
+	public Vec2i getSpawn() {
+		return spawn;
+	}
+	public Vec2i getCastle() {
+		return castle;
 	}
 }
