@@ -1,17 +1,11 @@
 package Warcraft;
 
 import Warcraft.fx.Screen;
-import Warcraft.fx.textures.Texture;
-import Warcraft.fx.textures.TextureAnimated;
-import Warcraft.fx.textures.TextureImage;
 import Warcraft.level.Level;
 import Warcraft.tools.Vec2;
 import Warcraft.tools.Vec2i;
-import org.w3c.dom.Text;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Game {
 
@@ -19,16 +13,19 @@ public class Game {
 	private Level level;
 	private int TICK_RATE = 60;
 
+	private Input input;
+
 	private boolean running;
 
 	public Game(){
 		screen = new Screen(new Vec2i(1280, 720), 20);
-		level = new Level(screen, null, null);
+		input = new Input(screen);
+		level = new Level(screen, input, null, null);
 		running = true;
 	}
 
 	public void tick(){
-		//TODO keyboard and mouse
+		input.tick();
 		level.tick();
 	}
 	public void draw(){

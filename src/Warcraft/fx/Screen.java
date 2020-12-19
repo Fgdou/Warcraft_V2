@@ -28,15 +28,25 @@ public class Screen {
 	public void render(){
 		StdDraw.show();
 	}
-	
-	
+
+
 	public Vec2 worldPosToScreen(Vec2 pos){
-		return (new Vec2(pos)).add(0.5).mul(getSizeTile()).mul(new Vec2(1, getRatio()));
+		// (pos + 0.5) * tileSize * screenRatio
+		return pos.add(0.5).mul(getSizeTile()).mul(new Vec2(1, getRatio()));
+	}
+	public Vec2 screenPosToWorld(Vec2 pos){
+		// pos / ratio / tileSize - 0.5
+		return pos.div(new Vec2(1, getRatio())).div(getSizeTile()).sub(0.5);
 	}
 	public Vec2 worldScaleToScreen(Vec2 pos){
+		// pos * tileSize * screenRatio
 		return pos.mul(getSizeTile()).mul(new Vec2(1, getRatio()));
 	}
-	
+	public Vec2 screenScaleToWorld(Vec2 pos){
+		// pos / screenRatio / tileSize
+		return pos.div(getSizeTile()).div(new Vec2(1, getRatio()));
+	}
+
 	public double getRatio(){
 		return (double)size.x/size.y;
 	}
