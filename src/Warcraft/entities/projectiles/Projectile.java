@@ -31,8 +31,11 @@ public abstract class Projectile extends Entity {
             die();
             if(target instanceof Tower)
                 ((Tower)target).hurt(damage);
-            else if(target instanceof Monster)
+            else if(target instanceof Monster) {
                 ((Monster) target).hurt(damage);
+                if(!target.isAlive())
+                    level.addCoins(((Monster) target).getCoinsKilled());
+            }
         }
     }
 

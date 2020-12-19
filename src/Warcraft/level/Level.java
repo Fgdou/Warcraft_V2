@@ -6,6 +6,7 @@ import Warcraft.entities.monsters.Monster;
 import Warcraft.entities.projectiles.Projectile;
 import Warcraft.entities.towers.Tower;
 import Warcraft.entities.towers.TowerArcher1;
+import Warcraft.entities.towers.TowerBomb1;
 import Warcraft.fx.Screen;
 import Warcraft.fx.textures.Texture;
 import Warcraft.tools.Vec2;
@@ -155,7 +156,7 @@ public class Level {
 			newTower = new TowerArcher1(new Vec2(inputHandler.getMouseTile()));
 		}else if(c == 'b'){
 			state = State.NewTower;
-			//TODO bomb
+			newTower = new TowerBomb1(new Vec2(inputHandler.getMouseTile()));
 		}else{
 			state = State.Normal;
 		}
@@ -289,5 +290,8 @@ public class Level {
 	}
 	public Vec2i getCastle() {
 		return castle;
+	}
+	public void addCoins(int coins) {
+		this.coins += coins;
 	}
 }
