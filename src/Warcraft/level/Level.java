@@ -5,13 +5,13 @@ import Warcraft.entities.Entity;
 import Warcraft.entities.monsters.Monster;
 import Warcraft.entities.projectiles.Projectile;
 import Warcraft.entities.towers.Tower;
+import Warcraft.entities.towers.TowerArcher1;
 import Warcraft.fx.Screen;
 import Warcraft.fx.textures.Texture;
-import Warcraft.fx.textures.TextureImage;
 import Warcraft.tools.Vec2;
 import Warcraft.tools.Vec2i;
 
-import java.lang.reflect.Array;
+import java.awt.*;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -24,6 +24,11 @@ public class Level {
 		TOWER,
 		SPAWN,
 		CASTLE
+	}
+	public enum State{
+		Normal,
+		NewTower,
+		UpgradeTower
 	}
 
 	private PathRandom path;
@@ -42,6 +47,12 @@ public class Level {
 	private boolean tickEnable;
 	private int tickSpeed;
 	private boolean ended;
+
+	private State state;
+	private Tower newTower;
+
+	private int coins;
+	private int lives;
 	
 	public Level(Screen screen, InputHandler inputHandler, PathRandom path, List<Wave> waves){
 		this.screen = screen;
@@ -57,6 +68,10 @@ public class Level {
 		tickEnable = false;
 		ended = false;
 		tickSpeed = 1;
+		state = State.Normal;
+		newTower = null;
+		lives = 20;
+		coins = 100;
 
 		fillTilesWithPath();
 	}
@@ -81,6 +96,9 @@ public class Level {
 		castle = new Vec2i(path.get(path.length()-1));
 		tiles[castle.y][castle.x] = Tiles.CASTLE;
 	}
+	private boolean isTileFree(Vec2i pos){
+		return tiles[pos.y][pos.x] == Tiles.EMPTY;
+	}
 
 	public boolean ended(){
 		return ended;
@@ -103,6 +121,41 @@ public class Level {
 		if(tickEnable)
 			return;
 
+		updateEntities();
+		updateKeyboard();
+		updateState();
+	}
+
+	private void updateState(){
+		if(state == State.NewTower){
+			newTower.setPos(new Vec2(inputHandler.getMouseTile()));
+		}
+		if(inputHandler.getMouseClicked() && state == State.NewTower && coins >= newTower.getCost()){
+			addEntity(newTower);
+			newTower = newTower.copy();
+			coins -= newTower.getCost();
+		}
+	}
+	private void updateKeyboard() {
+		if(!inputHandler.hastNextKey())
+			return;
+
+		char c = inputHandler.getNextKey();
+		if(c == 'e')
+			state = State.UpgradeTower;
+		else if(c == 'a') {
+			state = State.NewTower;
+			newTower = new TowerArcher1(new Vec2(inputHandler.getMouseTile()));
+		}else if(c == 'b'){
+			state = State.NewTower;
+			//TODO bomb
+		}else{
+			state = State.Normal;
+		}
+		if(c == 'q')
+			stop();
+	}
+	public void updateEntities(){
 		Iterator<Tower> it = towers.iterator();
 		while(it.hasNext()){
 			Tower t = it.next();
@@ -129,8 +182,8 @@ public class Level {
 
 		for(Tower t : towers){
 			for(Monster m : monsters) {
-				m.onInteract(t);
-				t.onInteract(m);
+				m.onInteract(t, this);
+				t.onInteract(m, this);
 			}
 		}
 	}
@@ -143,6 +196,9 @@ public class Level {
 			m.onDraw(screen);
 		for(Projectile p : projectiles)
 			p.onDraw(screen);
+
+		drawState();
+		drawInfos();
 	}
 
 	public void addEntity(Entity e){
@@ -155,7 +211,7 @@ public class Level {
 		else
 			throw new RuntimeException("e not found");
 	}
-	public void drawBackground(){
+	private void drawBackground(){
 		for(int i=0; i<screen.getnTiles().y; i++){
 			for(int j=0; j<screen.getnTiles().x; j++){
 				Texture t;
@@ -172,6 +228,40 @@ public class Level {
 		}
 		Texture.CASTLE.draw(screen, new Vec2(castle), 1, 0);
 		Texture.SPAWN.draw(screen, new Vec2(spawn), 1, 0);
+	}
+	private void drawState(){
+		if(state == State.NewTower && newTower != null){
+			newTower.onDraw(screen);
+			Color c = Color.GREEN;
+			if(newTower.getCost() > coins)
+				c = Color.RED;
+
+			screen.drawCircle(newTower.getPos(), newTower.getAttack().getRange(), c);
+			screen.drawRectangle(newTower.getPos(), new Vec2(.45, .45), c);
+		}
+
+		if(state == State.UpgradeTower)
+			for(Tower t : towers){
+				Color c = Color.GRAY;
+
+				if(t.isUpgradable()){
+					if(t.costUpgrade() > coins)
+						c = Color.RED;
+					else
+						c = Color.GREEN;
+				}
+
+				screen.drawCircle(t.getPos(), t.getAttack().getRange(), c);
+				screen.drawRectangle(t.getPos(), new Vec2(.45, .45), c);
+			}
+	}
+	private void drawInfos(){
+		screen.drawTextRightAbsolute(new Vec2(1, 0.98), 20, Color.BLACK, String.valueOf(coins));
+		screen.drawTextRightAbsolute(new Vec2(1, 0.95), 20, Color.BLACK, String.valueOf(lives));
+	}
+
+	public void hurt(int damage){
+		lives -= damage;
 	}
 
 

@@ -37,7 +37,7 @@ public abstract class Entity {
         alive = false;
     }
 
-    public abstract void onInteract(Entity other);
+    public abstract void onInteract(Entity other, Level level);
     public boolean isAlive(){
         return alive;
     }

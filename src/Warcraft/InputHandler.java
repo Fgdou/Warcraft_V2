@@ -2,7 +2,9 @@ package Warcraft;
 
 import Warcraft.fx.Screen;
 import Warcraft.tools.Vec2;
+import Warcraft.tools.Vec2i;
 
+import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -43,6 +45,9 @@ public class InputHandler {
     public Vec2 getMouse(){
         return screen.screenPosToWorld(mouse);
     }
+    public Vec2i getMouseTile(){
+        return new Vec2i(screen.screenPosToWorldTile(mouse));
+    }
     public Vec2 getMouseAbsolute(){
         return mouse;
     }
@@ -63,5 +68,14 @@ public class InputHandler {
             return true;
         }
         return false;
+    }
+    public boolean hastNextKey(){
+        return (keyboard.size() != 0);
+    }
+    public char getNextKey(){
+        Iterator<Character> it = keyboard.iterator();
+        char c = it.next();
+        it.remove();
+        return c;
     }
 }

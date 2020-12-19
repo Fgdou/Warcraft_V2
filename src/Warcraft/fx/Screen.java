@@ -34,13 +34,16 @@ public class Screen {
 		// (pos + 0.5) * tileSize * screenRatio
 		return pos.add(0.5).mul(getSizeTile()).mul(new Vec2(1, getRatio()));
 	}
+	public Vec2 worldScaleToScreen(Vec2 pos){
+		// pos * tileSize * screenRatio
+		return pos.mul(getSizeTile()).mul(new Vec2(1, getRatio()));
+	}
 	public Vec2 screenPosToWorld(Vec2 pos){
 		// pos / ratio / tileSize - 0.5
 		return pos.div(new Vec2(1, getRatio())).div(getSizeTile()).sub(0.5);
 	}
-	public Vec2 worldScaleToScreen(Vec2 pos){
-		// pos * tileSize * screenRatio
-		return pos.mul(getSizeTile()).mul(new Vec2(1, getRatio()));
+	public Vec2i screenPosToWorldTile(Vec2 pos) {
+		return (new Vec2i(pos.div(new Vec2(1, getRatio())).div(getSizeTile())));
 	}
 	public Vec2 screenScaleToWorld(Vec2 pos){
 		// pos / screenRatio / tileSize
@@ -54,13 +57,12 @@ public class Screen {
 		return size;
 	}
 
-	//TODO absolute
 	public void drawRectangle(Vec2 pos, Vec2 halfSize, Color c){
 		pos = worldPosToScreen(pos);
 		halfSize = worldScaleToScreen(halfSize);
 		
 		StdDraw.setPenColor(c);
-		StdDraw.filledRectangle(pos.x, pos.y, halfSize.x, halfSize.y);
+		StdDraw.rectangle(pos.x, pos.y, halfSize.x, halfSize.y);
 	}
 	public void drawImage(Vec2 pos, Vec2 size, String file, double angle){
 		pos = worldPosToScreen(pos);

@@ -78,7 +78,7 @@ public class Vec2 {
 	}
 
     public double getAngle() {
-		//TODO
-		return 0;
+		double a = Math.atan2(y, x);
+		return a*360/(2*Math.PI) - 90;
     }
 }

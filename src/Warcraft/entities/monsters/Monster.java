@@ -1,6 +1,8 @@
 package Warcraft.entities.monsters;
 
+import Warcraft.Attack;
 import Warcraft.entities.Entity;
+import Warcraft.entities.projectiles.Projectile;
 import Warcraft.fx.Screen;
 import Warcraft.fx.textures.Texture;
 import Warcraft.level.Level;
@@ -14,6 +16,11 @@ public abstract class Monster extends Entity {
     private double pos;
     private double scale;
     private boolean fly;
+    private Attack attack;
+
+    public Attack getAttack() {
+        return attack;
+    }
 
     public Monster(Texture texture, int pv, double speed, double scale, boolean fly) {
         super(new Vec2(), texture);
@@ -24,14 +31,18 @@ public abstract class Monster extends Entity {
         this.fly = fly;
         this.lastPos = getPos();
     }
+    public void setAttack(Attack attack){
+        this.attack = attack;
+    }
 
     @Override
     public void onTick(Level level) {
         pos += speed;
 
-        if(pos >= level.getPath().length()-1)
+        if(pos >= level.getPath().length()-1) {
             die();
-        //TODO hurt castle
+            level.hurt(getAttack().getDamage());
+        }
 
         lastPos = getPos();
         Vec2 actualPos = level.getPath().get(pos);
@@ -55,7 +66,7 @@ public abstract class Monster extends Entity {
         getTexture().draw(screen, getPos(), scale, angle);
     }
     @Override
-    public void onInteract(Entity e){
+    public void onInteract(Entity e, Level level){
         //TODO
     }
     @Override

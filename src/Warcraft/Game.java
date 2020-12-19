@@ -21,13 +21,12 @@ public class Game {
 	private boolean running;
 
 	public Game(){
-		screen = new Screen(new Vec2i(1280, 720), 20);
+		screen = new Screen(new Vec2i(1000, 800), 12);
 		inputHandler = new InputHandler(screen);
 		level = new Level(screen, inputHandler, new PathRandom(screen.getnTiles(), new Vec2i(1,1)), null);
 		running = true;
 
 		level.addEntity(new Zombie(new Vec2(level.getSpawn())));
-		level.addEntity(new TowerArcher1(new Vec2(level.getSpawn())));
 	}
 
 	public void tick(){
@@ -76,6 +75,9 @@ public class Game {
 			screen.drawTextLeftAbsolute(new Vec2(0, 0.95), 20, Color.black, "Fps: " + lastCountFps);
 
 			screen.render();
+
+			if(level.ended())
+				running = false;
 		}
 	}
 
