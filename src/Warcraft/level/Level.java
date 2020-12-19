@@ -32,7 +32,7 @@ public class Level {
 	}
 
 	private PathRandom path;
-	private List<Wave> waves;
+	private Wave waves;
 	private Screen screen;
 	private InputHandler inputHandler;
 
@@ -54,7 +54,7 @@ public class Level {
 	private int coins;
 	private int lives;
 	
-	public Level(Screen screen, InputHandler inputHandler, PathRandom path, List<Wave> waves){
+	public Level(Screen screen, InputHandler inputHandler, PathRandom path, Wave waves){
 		this.screen = screen;
 		this.path = path;
 		this.waves = waves;
@@ -124,6 +124,13 @@ public class Level {
 		updateEntities();
 		updateKeyboard();
 		updateState();
+
+		if(waves.hasNext()){
+			Monster m = waves.getNext();
+
+			if(m != null)
+				addEntity(m);
+		}
 	}
 
 	private void updateState(){
@@ -268,7 +275,7 @@ public class Level {
 	public PathRandom getPath() {
 		return path;
 	}
-	public List<Wave> getWaves() {
+	public Wave getWaves() {
 		return waves;
 	}
 	public Screen getScreen() {

@@ -1,14 +1,15 @@
 package Warcraft;
 
 import Warcraft.entities.monsters.Zombie;
-import Warcraft.entities.towers.TowerArcher1;
 import Warcraft.fx.Screen;
 import Warcraft.level.Level;
 import Warcraft.level.PathRandom;
+import Warcraft.level.Wave;
 import Warcraft.tools.Vec2;
 import Warcraft.tools.Vec2i;
 
 import java.awt.*;
+import java.io.FileNotFoundException;
 
 public class Game {
 
@@ -20,13 +21,12 @@ public class Game {
 
 	private boolean running;
 
-	public Game(){
-		screen = new Screen(new Vec2i(1000, 800), 12);
+	public Game() {
+		screen = new Screen(new Vec2i(1000, 800), 10);
 		inputHandler = new InputHandler(screen);
-		level = new Level(screen, inputHandler, new PathRandom(screen.getnTiles(), new Vec2i(1,1)), null);
+		level = new Level(screen, inputHandler, new PathRandom(screen.getnTiles(), new Vec2i(1,1)), new Wave("assets/levels/level1.txt"));
 		running = true;
 
-		level.addEntity(new Zombie(new Vec2(level.getSpawn())));
 	}
 
 	public void tick(){
@@ -81,7 +81,7 @@ public class Game {
 		}
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException {
 		Game g = new Game();
 		g.run();
 	}

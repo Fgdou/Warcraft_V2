@@ -17,12 +17,13 @@ public abstract class Monster extends Entity {
     private double scale;
     private boolean fly;
     private Attack attack;
+    private int coinsKilled;
 
     public Attack getAttack() {
         return attack;
     }
 
-    public Monster(Texture texture, int pv, double speed, double scale, boolean fly) {
+    public Monster(Texture texture, int pv, double speed, double scale, boolean fly, int coinsKilled) {
         super(new Vec2(), texture);
         this.pv = pv;
         this.speed = speed;
@@ -30,6 +31,7 @@ public abstract class Monster extends Entity {
         this.scale = scale;
         this.fly = fly;
         this.lastPos = getPos();
+        this.coinsKilled = coinsKilled;
     }
     public void setAttack(Attack attack){
         this.attack = attack;
@@ -37,11 +39,17 @@ public abstract class Monster extends Entity {
 
     @Override
     public void onTick(Level level) {
+        if(attack != null)
+            attack.cool();
+
         pos += speed;
 
         if(pos >= level.getPath().length()-1) {
             die();
-            level.hurt(getAttack().getDamage());
+            if(getAttack() == null)
+                level.hurt(1);
+            else
+                level.hurt(getAttack().getDamage());
         }
 
         lastPos = getPos();
@@ -66,9 +74,7 @@ public abstract class Monster extends Entity {
         getTexture().draw(screen, getPos(), scale, angle);
     }
     @Override
-    public void onInteract(Entity e, Level level){
-        //TODO
-    }
+    public void onInteract(Entity e, Level level){}
     @Override
     public void die(){
         pv = 0;
@@ -84,5 +90,23 @@ public abstract class Monster extends Entity {
 
     public boolean getFly(){
         return fly;
+    }
+    public int getCoinsKilled(){
+        return coinsKilled;
+    }
+
+    public static Monster getByName(String name){
+        switch (name){
+            case "Zombie":
+                return new Zombie();
+            case "Bat":
+                return new Bat();
+            case "IronGolem":
+                return new IronGolem();
+            case "EnderMan":
+                return new EnderMan();
+            default:
+                return null;
+        }
     }
 }

@@ -1,0 +1,13 @@
+wave 5 60
+Zombie
+
+wave 10 60
+Bat
+
+wave 20 50
+
+boss 1 1
+IronGolem
+
+wave 100 30
+EnderMan
