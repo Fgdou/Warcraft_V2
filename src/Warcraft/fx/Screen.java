@@ -43,7 +43,8 @@ public class Screen {
 	public Vec2i getSize() {
 		return size;
 	}
-	
+
+	//TODO absolute
 	public void drawRectangle(Vec2 pos, Vec2 halfSize, Color c){
 		pos = worldPosToScreen(pos);
 		halfSize = worldScaleToScreen(halfSize);
@@ -63,6 +64,24 @@ public class Screen {
 
 		StdDraw.setPenColor(c);
 		StdDraw.ellipse(pos.x, pos.y, size.x, size.y);
+	}
+
+	public void drawTextLeftAbsolute(Vec2 pos, int fontSize, Color c, String msg){
+		StdDraw.setFont(new Font("Roboto", Font.PLAIN, fontSize));
+		StdDraw.setPenColor(c);
+		StdDraw.textLeft(pos.x, pos.y, msg);
+	}
+	public void drawTextRightAbsolute(Vec2 pos, int fontSize, Color c, String msg){
+		StdDraw.setFont(new Font("Roboto", Font.PLAIN, fontSize));
+		StdDraw.setPenColor(c);
+		StdDraw.textRight(pos.x, pos.y, msg);
+	}
+	public void drawTextLeft(Vec2 pos, int fontSize, Color c, String msg){
+		drawTextLeftAbsolute(worldPosToScreen(pos), fontSize, c, msg);
+	}
+	public void drawTextRight(Vec2 pos, int fontSize, Color c, String msg){
+		drawTextRightAbsolute(worldPosToScreen(pos), fontSize, c, msg);
+
 	}
 
 	public void clear() {
