@@ -13,7 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Level {
-	private Path path;
+	private PathRandom path;
 	private List<Wave> waves;
 	private Screen screen;
 	private InputHandler inputHandler;
@@ -27,7 +27,7 @@ public class Level {
 	private int tickSpeed;
 	private boolean ended;
 	
-	public Level(Screen screen, InputHandler inputHandler, Path path, List<Wave> waves){
+	public Level(Screen screen, InputHandler inputHandler, PathRandom path, List<Wave> waves){
 		this.screen = screen;
 		this.path = path;
 		this.waves = waves;
@@ -75,5 +75,9 @@ public class Level {
 				t.draw(screen, new Vec2(j, i), 1, 0);
 			}
 		}
+
+		t = new TextureImage("assets/images/path.png");
+		for(int i=0; i<path.length(); i++)
+			t.draw(screen, path.get(i), 1, 0);
 	}
 }
