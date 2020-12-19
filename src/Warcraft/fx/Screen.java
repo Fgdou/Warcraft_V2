@@ -30,14 +30,8 @@ public class Screen {
 	}
 	
 	
-	public Vec2 worldPosToScreen(Vec2i pos){
-		return worldPosToScreen(new Vec2(pos));
-	}
 	public Vec2 worldPosToScreen(Vec2 pos){
 		return (new Vec2(pos)).add(0.5).mul(getSizeTile()).mul(new Vec2(1, getRatio()));
-	}
-	public Vec2 worldScaleToScreen(Vec2i pos){
-		return worldScaleToScreen(new Vec2(pos));
 	}
 	public Vec2 worldScaleToScreen(Vec2 pos){
 		return pos.mul(getSizeTile()).mul(new Vec2(1, getRatio()));
@@ -57,19 +51,20 @@ public class Screen {
 		StdDraw.setPenColor(c);
 		StdDraw.filledRectangle(pos.x, pos.y, halfSize.x, halfSize.y);
 	}
-	public void drawRectangle(Vec2i pos, Vec2 halfSize, Color c){
-		drawRectangle(new Vec2(pos), halfSize, c);
-	}
 	public void drawImage(Vec2 pos, Vec2 size, String file, double angle){
 		pos = worldPosToScreen(pos);
 		size = worldScaleToScreen(size);
 		
 		StdDraw.picture(pos.x, pos.y, file, size.x, size.y, angle);
 	}
-	public void drawImage(Vec2i pos, Vec2 size, String file, double angle){
-		drawImage(new Vec2(pos), size, file, angle);
+	public void drawCircle(Vec2 pos, double radius, Color c){
+		pos = worldPosToScreen(pos);
+		Vec2 size = worldScaleToScreen(new Vec2(radius, radius));
+
+		StdDraw.setPenColor(c);
+		StdDraw.ellipse(pos.x, pos.y, size.x, size.y);
 	}
-	
+
 	public void clear() {
 		StdDraw.clear();
 	}
