@@ -21,7 +21,7 @@ public class Game {
 	public Game(){
 		screen = new Screen(new Vec2i(1280, 720), 20);
 		inputHandler = new InputHandler(screen);
-		level = new Level(screen, inputHandler, new PathRandom(screen.getnTiles(), new Vec2i(0,0)), null);
+		level = new Level(screen, inputHandler, new PathRandom(screen.getnTiles(), new Vec2i(1,1)), null);
 		running = true;
 	}
 

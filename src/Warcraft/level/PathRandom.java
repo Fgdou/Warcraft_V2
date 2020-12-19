@@ -54,7 +54,7 @@ public class PathRandom {
 
     private static List<Vec2i> generate(Vec2i size, Vec2i start){
         int[][] tiles = new int[size.y/2][size.x/2];
-        generate_int(tiles, start, 1);
+        generate_int(tiles, start.div(2), 1);
 
         print(tiles);
 

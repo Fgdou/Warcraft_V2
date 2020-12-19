@@ -8,17 +8,31 @@ import Warcraft.fx.Screen;
 import Warcraft.fx.textures.Texture;
 import Warcraft.fx.textures.TextureImage;
 import Warcraft.tools.Vec2;
+import Warcraft.tools.Vec2i;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Level {
+	public enum Tiles{
+		EMPTY,
+		PATH,
+		TOWER,
+		SPAWN,
+		CASTLE
+	}
+
 	private PathRandom path;
 	private List<Wave> waves;
 	private Screen screen;
 	private InputHandler inputHandler;
 
-	private int[][] tiles;
+	private Tiles[][] tiles;
+	private Vec2i spawn;
+	private Vec2i castle;
+
 	private List<Monster> monsters;
 	private List<Tower> towers;
 	private List<Projectile> projectiles;
@@ -33,7 +47,7 @@ public class Level {
 		this.waves = waves;
 		this.inputHandler = inputHandler;
 
-		tiles = new int[screen.getnTiles().y][screen.getnTiles().x];
+		tiles = new Tiles[screen.getnTiles().y][screen.getnTiles().x];
 		monsters = new LinkedList<>();
 		towers = new LinkedList<>();
 		projectiles = new LinkedList<>();
@@ -41,6 +55,29 @@ public class Level {
 		tickEnable = false;
 		ended = false;
 		tickSpeed = 1;
+
+		fillTilesWithPath();
+	}
+
+	private void fillTilesWithPath() {
+		//Clearing the table
+		for (Tiles[] tile : tiles) {
+			Arrays.fill(tile, Tiles.EMPTY);
+		}
+
+		//Set the spawn with first path
+		spawn = new Vec2i(path.get(0));
+		tiles[spawn.y][spawn.x] = Tiles.SPAWN;
+
+		//Fill with the path
+		for(int i=1; i<path.length()-1; i++){
+			Vec2i pos = new Vec2i(path.get(i));
+			tiles[pos.y][pos.x] = Tiles.PATH;
+		}
+
+		//Set the castle to the last path
+		castle = new Vec2i(path.get(path.length()-1));
+		tiles[castle.y][castle.x] = Tiles.CASTLE;
 	}
 
 	public boolean ended(){
@@ -69,15 +106,21 @@ public class Level {
 	}
 
 	public void drawBackground(){
-		Texture t = new TextureImage("assets/images/background.png");
 		for(int i=0; i<screen.getnTiles().y; i++){
 			for(int j=0; j<screen.getnTiles().x; j++){
+				Texture t;
+
+				Tiles tile = tiles[i][j];
+
+				if(tile == Tiles.PATH)
+					t = Texture.PATH;
+				else
+					t = Texture.BACKGROUND;
+
 				t.draw(screen, new Vec2(j, i), 1, 0);
 			}
 		}
-
-		t = new TextureImage("assets/images/path.png");
-		for(int i=0; i<path.length(); i++)
-			t.draw(screen, path.get(i), 1, 0);
+		Texture.CASTLE.draw(screen, new Vec2(castle), 1, 0);
+		Texture.SPAWN.draw(screen, new Vec2(spawn), 1, 0);
 	}
 }
