@@ -127,6 +127,9 @@ public class Level {
 		updateState();
 
 		if(waves.hasNext()){
+			if(!hasMob())
+				waves.startWave();
+
 			Monster m = waves.getNext();
 
 			if(m != null)
@@ -143,6 +146,7 @@ public class Level {
 			newTower = newTower.copy();
 			coins -= newTower.getCost();
 		}
+		//TODO update towers
 	}
 	private void updateKeyboard() {
 		if(!inputHandler.hastNextKey())
@@ -272,7 +276,9 @@ public class Level {
 		lives -= damage;
 	}
 
-
+	public boolean hasMob(){
+		return (monsters.size() != 0);
+	}
 	public PathRandom getPath() {
 		return path;
 	}

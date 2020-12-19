@@ -16,6 +16,7 @@ public class Wave {
     int wave;
     int monster;
     int time;
+    boolean startWave = false;
 
     public Wave(String file) {
         Scanner sc = new Scanner(Wave.class.getResourceAsStream("/" + file));
@@ -56,6 +57,8 @@ public class Wave {
         return (wave < monsters.size());
     }
     public Monster getNext(){
+        if(!startWave)
+            return null;
         if(time <= 0 && hasNext()){
 
             int n = (int)(Math.random()*monsters.get(wave).size());
@@ -65,6 +68,7 @@ public class Wave {
             if(monster >= number.get(wave)){
                 wave++;
                 time = 5*60;
+                startWave = false;
             }else{
                 time = times.get(wave);
             }
@@ -75,5 +79,8 @@ public class Wave {
             time--;
         }
         return null;
+    }
+    public void startWave(){
+        startWave = true;
     }
 }

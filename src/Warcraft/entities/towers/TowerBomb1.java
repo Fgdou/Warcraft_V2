@@ -14,7 +14,7 @@ import Warcraft.tools.Vec2;
 public class TowerBomb1 extends Tower {
     public TowerBomb1(Vec2 pos) {
         super(pos, new TextureImage("assets/images/bomb1.png"), 100);
-        setAttack(new Attack(this, 10, .15, 3, 90));
+        setAttack(new Attack(this, 10, .15, 1.7, 90));
     }
 
     @Override
