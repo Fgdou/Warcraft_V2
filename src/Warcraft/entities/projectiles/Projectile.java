@@ -1,4 +1,6 @@
 package Warcraft.entities.projectiles;
 
-public class Projectile {
+import Warcraft.entities.Entity;
+
+public abstract class Projectile extends Entity {
 }

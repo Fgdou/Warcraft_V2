@@ -1,4 +1,6 @@
 package Warcraft.entities.monsters;
 
-public class Monster {
+import Warcraft.entities.Entity;
+
+public abstract class Monster extends Entity {
 }

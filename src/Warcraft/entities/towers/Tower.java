@@ -1,4 +1,6 @@
 package Warcraft.entities.towers;
 
-public class Tower {
+import Warcraft.entities.Entity;
+
+public abstract class Tower extends Entity {
 }

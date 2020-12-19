@@ -56,7 +56,7 @@ public class PathRandom {
         int[][] tiles = new int[size.y/2][size.x/2];
         generate_int(tiles, start.div(2), 1);
 
-        print(tiles);
+        //print(tiles);
 
         Vec2i max = getMax(tiles);
         assert(max != null);
@@ -64,7 +64,7 @@ public class PathRandom {
         List<Vec2i> list = new ArrayList<>(goBack(tiles, max));
         for(int i=0; i<list.size(); i++)
             list.set(i, list.get(i).mul(-2));
-        System.out.println(list);
+        //System.out.println(list);
         return list;
     }
     private static Vec2i getMax(int[][] tab){

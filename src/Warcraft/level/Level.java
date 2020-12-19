@@ -1,6 +1,7 @@
 package Warcraft.level;
 
 import Warcraft.InputHandler;
+import Warcraft.entities.Entity;
 import Warcraft.entities.monsters.Monster;
 import Warcraft.entities.projectiles.Projectile;
 import Warcraft.entities.towers.Tower;
@@ -12,6 +13,7 @@ import Warcraft.tools.Vec2i;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -100,9 +102,58 @@ public class Level {
 	public void tick() {
 		if(tickEnable)
 			return;
+
+		Iterator<Tower> it = towers.iterator();
+		while(it.hasNext()){
+			Tower t = it.next();
+			t.onTick(this);
+			if(!t.isAlive())
+				it.remove();
+		}
+
+		Iterator<Monster> im = monsters.iterator();
+		while(im.hasNext()){
+			Monster t = im.next();
+			t.onTick(this);
+			if(!t.isAlive())
+				im.remove();
+		}
+
+		Iterator<Projectile> ip = projectiles.iterator();
+		while(ip.hasNext()){
+			Projectile t = ip.next();
+			t.onTick(this);
+			if(!t.isAlive())
+				ip.remove();
+		}
+
+		for(Tower t : towers){
+			for(Monster m : monsters) {
+				m.onInteract(t);
+				t.onInteract(m);
+			}
+		}
 	}
 	public void draw(){
 		drawBackground();
+
+		for(Tower t : towers)
+			t.onDraw(screen);
+		for(Monster m : monsters)
+			m.onDraw(screen);
+		for(Projectile p : projectiles)
+			p.onDraw(screen);
+	}
+
+	public void addEntity(Entity e){
+		if(e instanceof Monster)
+			monsters.add((Monster)e);
+		else if(e instanceof Tower)
+			towers.add((Tower)e);
+		else if(e instanceof Projectile)
+			projectiles.add((Projectile)e);
+		else
+			throw new RuntimeException("e not found");
 	}
 
 	public void drawBackground(){
