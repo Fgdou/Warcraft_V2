@@ -18,7 +18,10 @@ Phamtom
 boss 2 600
 Llama
 
-wave 100 30
+wave 20 40
+EnderMan
+
+wave 50 30
 EnderMan
 
 wave 200 20

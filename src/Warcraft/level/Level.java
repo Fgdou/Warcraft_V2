@@ -136,6 +136,11 @@ public class Level {
 				if(m != null)
 					addEntity(m);
 			}
+
+			if(lives <= 0){
+				lives = 0;
+				stop();
+			}
 		}
 	}
 
