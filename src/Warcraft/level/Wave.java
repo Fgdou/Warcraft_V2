@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Wave {
+    //TODO set 5*60 variable
+
     List<List<String>> monsters;
     List<Integer> times;
     List<Integer> number;
@@ -69,6 +71,7 @@ public class Wave {
                 wave++;
                 time = 5*60;
                 startWave = false;
+                monster = 0;
             }else{
                 time = times.get(wave);
             }
@@ -82,5 +85,11 @@ public class Wave {
     }
     public void startWave(){
         startWave = true;
+    }
+
+    public double getPercent() {
+        if(!startWave || monster == 0 || wave >= monsters.size())
+            return 1.0 - ((double) time / (5*60));
+        return 1.0 - ((double)monster / number.get(wave));
     }
 }

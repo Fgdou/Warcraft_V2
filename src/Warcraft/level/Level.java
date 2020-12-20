@@ -266,6 +266,8 @@ public class Level {
 		}
 		Texture.CASTLE.draw(screen, new Vec2(castle), 1, 0);
 		Texture.SPAWN.draw(screen, new Vec2(spawn), 1, 0);
+
+		screen.drawProgressBar((new Vec2(spawn)).add(new Vec2(0, -.5)), new Vec2(.5, .1), waves.getPercent(), Color.BLUE);
 	}
 	private void drawState(){
 		if(state == State.NewTower && newTower != null){
