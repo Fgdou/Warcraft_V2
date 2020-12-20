@@ -9,16 +9,16 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Wave {
-    //TODO set 5*60 variable
+    private List<List<String>> monsters;
+    private List<Integer> times;
+    private List<Integer> number;
 
-    List<List<String>> monsters;
-    List<Integer> times;
-    List<Integer> number;
+    private final int COOLDOWN = 10*60;
 
-    int wave;
-    int monster;
-    int time;
-    boolean startWave = false;
+    private int wave;
+    private int monster;
+    private int time;
+    private boolean startWave = false;
 
     public Wave(String file) {
         Scanner sc = new Scanner(Wave.class.getResourceAsStream("/" + file));
@@ -26,7 +26,7 @@ public class Wave {
         times = new ArrayList<>();
         number = new ArrayList<>();
         wave = 0;
-        time = 60*5;
+        time = COOLDOWN;
         monster = 0;
 
         List<String> current = new ArrayList<>();
@@ -69,14 +69,13 @@ public class Wave {
 
             if(monster >= number.get(wave)){
                 wave++;
-                time = 5*60;
+                time = COOLDOWN;
                 startWave = false;
                 monster = 0;
             }else{
                 time = times.get(wave);
             }
 
-            System.out.println(wave + " " + time);
             return m;
         }else{
             time--;
@@ -89,7 +88,7 @@ public class Wave {
 
     public double getPercent() {
         if(!startWave || monster == 0 || wave >= monsters.size())
-            return 1.0 - ((double) time / (5*60));
+            return 1.0 - ((double) time / (COOLDOWN));
         return 1.0 - ((double)monster / number.get(wave));
     }
 }
