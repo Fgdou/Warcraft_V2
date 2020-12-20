@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Warcraft_V2:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Warcraft_V2_jar</output-path>
+    <root id="archive" name="Warcraft_V2.jar">
+      <element id="module-output" name="Warcraft_V2" />
+    </root>
+  </artifact>
+</component>
