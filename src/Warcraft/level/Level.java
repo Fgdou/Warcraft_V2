@@ -140,18 +140,20 @@ public class Level {
 	}
 
 	private void updateState(){
+		Vec2i mouse = inputHandler.getMouseTile();
 		if(state == State.NewTower){
-			newTower.setPos(new Vec2(inputHandler.getMouseTile()));
+			newTower.setPos(new Vec2(mouse));
 		}
 		if(inputHandler.getMouseClicked()){
-			if(state == State.NewTower && coins >= newTower.getCost()) {
+			if(state == State.NewTower && coins >= newTower.getCost() && tiles[mouse.y][mouse.x] == Tiles.EMPTY) {
 				addEntity(newTower);
 				newTower = newTower.copy();
 				coins -= newTower.getCost();
+				tiles[mouse.y][mouse.x] = Tiles.TOWER;
 			}else if(state == State.UpgradeTower){
 				Tower founded = null;
 				for(Tower t : towers){
-					if(t.costUpgrade() <= coins && t.isUpgradable() && t.getPos().equals(new Vec2(inputHandler.getMouseTile()))){
+					if(t.costUpgrade() <= coins && t.isUpgradable() && t.getPos().equals(new Vec2(mouse))){
 						founded = t;
 					}
 				}
@@ -192,8 +194,10 @@ public class Level {
 		while(it.hasNext()){
 			Tower t = it.next();
 			t.onTick(this);
-			if(!t.isAlive())
+			if(!t.isAlive()) {
 				it.remove();
+				tiles[(int)t.getPos().y][(int)t.getPos().x] = Tiles.EMPTY;
+			}
 		}
 
 		Iterator<Monster> im = monsters.iterator();
@@ -267,7 +271,7 @@ public class Level {
 		if(state == State.NewTower && newTower != null){
 			newTower.onDraw(screen);
 			Color c = Color.GREEN;
-			if(newTower.getCost() > coins)
+			if(newTower.getCost() > coins || tiles[(int)newTower.getPos().y][(int)newTower.getPos().x] != Tiles.EMPTY)
 				c = Color.RED;
 
 			screen.drawRectangle(newTower.getPos(), new Vec2(.45, .45), c);

@@ -32,7 +32,10 @@ public class Screen {
 
 	public Vec2 worldPosToScreen(Vec2 pos){
 		// (pos + 0.5) * tileSize * screenRatio
-		return pos.add(0.5).mul(getSizeTile()).mul(new Vec2(1, getScreenRatio()));
+		Vec2 p = pos.add(0.5).mul(getSizeTile()).mul(new Vec2(1, getScreenRatio()));
+		if(p.x < 0 || p.x > 1 || p.y < 0 || p.y > 1)
+			return new Vec2();
+		return p;
 	}
 	public Vec2 worldScaleToScreen(Vec2 pos){
 		// pos * tileSize * screenRatio
@@ -40,7 +43,10 @@ public class Screen {
 	}
 	public Vec2 screenPosToWorld(Vec2 pos){
 		// pos / ratio / tileSize - 0.5
-		return pos.div(new Vec2(1, getScreenRatio())).div(getSizeTile()).sub(0.5);
+		Vec2 p = pos.div(new Vec2(1, getScreenRatio())).div(getSizeTile()).sub(0.5);
+		if(p.x < 0 || p.x >= size.x || p.y < 0 || p.y >= size.y)
+			return new Vec2();
+		return p;
 	}
 	public Vec2i screenPosToWorldTile(Vec2 pos) {
 		return (new Vec2i(pos.div(new Vec2(1, getScreenRatio())).div(getSizeTile())));
