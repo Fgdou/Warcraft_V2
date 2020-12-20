@@ -6,7 +6,7 @@ import Warcraft.tools.Vec2;
 
 public class TowerArcher1 extends TowerArcher {
     public TowerArcher1(Vec2 pos) {
-        super(pos, new TextureImage("assets/images/archer1.png"), 70);
+        super(pos, new TextureImage("assets/images/archer1.png"), 25);
         setAttack(new Attack(this, 2, .2, 2, 60));
     }
 
@@ -16,7 +16,7 @@ public class TowerArcher1 extends TowerArcher {
     }
     @Override
     public int costUpgrade(){
-        return 40;
+        return 75;
     }
     @Override
     public Tower getUpgrade(){

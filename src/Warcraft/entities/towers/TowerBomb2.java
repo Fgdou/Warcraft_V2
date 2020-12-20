@@ -7,7 +7,7 @@ import Warcraft.tools.Vec2;
 
 public class TowerBomb2 extends TowerBomb {
     public TowerBomb2(Vec2 pos) {
-        super(pos, new TextureImage("assets/images/bomb2.png"), 250);
+        super(pos, new TextureImage("assets/images/bomb2.png"), 100);
         setAttack(new Attack(this, 15, .15, 2, 70));
     }
 
@@ -18,7 +18,7 @@ public class TowerBomb2 extends TowerBomb {
 
     @Override
     public int costUpgrade() {
-        return 150;
+        return 500;
     }
 
     @Override

@@ -9,9 +9,18 @@ wave 20 50
 boss 1 1
 IronGolem
 
+wave 50 40
+
+boss 2 600
+Llama
+
 wave 100 30
 EnderMan
 
 wave 200 20
 
-wave 2000 5
+wave 500 5
+
+wave 500 5
+IronGolem
+Llama

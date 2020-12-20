@@ -91,4 +91,8 @@ public class Wave {
             return 1.0 - ((double) time / (COOLDOWN));
         return 1.0 - ((double)monster / number.get(wave));
     }
+
+    public boolean isWatingNextWave() {
+        return (startWave && monster == 0);
+    }
 }

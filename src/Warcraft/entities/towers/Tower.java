@@ -17,6 +17,8 @@ public abstract class Tower extends Entity {
     private Attack attack;
     private boolean attackFly;
 
+    private int cntTps;
+
     public Attack getAttack() {
         return attack;
     }
@@ -26,6 +28,7 @@ public abstract class Tower extends Entity {
         this.pv = pv;
         this.maxPv = pv;
         this.attackFly = attackFly;
+        this.cntTps = 0;
     }
     public void setAttack(Attack attack){
         this.attack = attack;
@@ -33,6 +36,12 @@ public abstract class Tower extends Entity {
 
     @Override
     public void onTick(Level level){
+        cntTps++;
+        if(cntTps > 300 || level.getWaves().isWatingNextWave() && cntTps >= (60*10)/maxPv){
+            if(pv < maxPv)
+                pv += 1;
+            cntTps = 0;
+        }
         attack.cool();
     }
     @Override
@@ -56,10 +65,11 @@ public abstract class Tower extends Entity {
     @Override
     public void die(){
         pv = 0;
+        super.die();
     }
     @Override
     public boolean isAlive(){
-        return (pv > 0);
+        return (pv > 0) && super.isAlive();
     }
 
     public abstract Tower copy();

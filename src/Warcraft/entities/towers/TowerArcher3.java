@@ -7,7 +7,7 @@ import Warcraft.tools.Vec2;
 
 public class TowerArcher3 extends TowerArcher {
     public TowerArcher3(Vec2 pos) {
-        super(pos, new TextureImage("assets/images/archer3.png"), 500);
+        super(pos, new TextureImage("assets/images/archer3.png"), 250);
         setAttack(new Attack(this, 10, .5, 3, 30));
     }
 

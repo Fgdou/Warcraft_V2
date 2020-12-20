@@ -160,8 +160,8 @@ public class Level {
 
 				if(founded != null){
 					coins -= founded.costUpgrade();
-					founded.die();
 					addEntity(founded.getUpgrade());
+					towers.remove(founded);
 				}
 			}
 		}

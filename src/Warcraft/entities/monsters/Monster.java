@@ -123,6 +123,8 @@ public abstract class Monster extends Entity {
                 return new IronGolem();
             case "EnderMan":
                 return new EnderMan();
+            case "Llama":
+                return new Llama();
             default:
                 return null;
         }

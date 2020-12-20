@@ -102,8 +102,8 @@ public class Screen {
 	public void drawProgressBarAbsolute(Vec2 pos, Vec2 halfSize, double percent, Color c){
 		if(percent < 0)
 			percent = 0;
-		if(percent > 1)
-			percent = 1;
+		if(percent >= 1)
+			return;
 		drawFilledRectangleAbsolute(pos, halfSize, Color.gray);
 
 		Vec2 rec = pos.sub(new Vec2(halfSize.x*(1-percent), 0));

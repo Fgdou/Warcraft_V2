@@ -18,7 +18,7 @@ public class Attack {
         this.speed = speed;
         this.range = range;
         this.coolDownTime = coolDownTime;
-        this.coolDown = 0;
+        this.coolDown = (int)(Math.random()*coolDownTime);
     }
 
     public boolean isReady(){
