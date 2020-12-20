@@ -217,10 +217,30 @@ public class Level {
 		}
 
 		for(Tower t : towers){
+			Monster cloth = null;
+			double dist = 0;
 			for(Monster m : monsters) {
-				m.onInteract(t, this);
-				t.onInteract(m, this);
+				if(cloth == null || m.getPos().distance(t.getPos()) < dist){
+					dist = m.getPos().distance(t.getPos());
+					cloth = m;
+				}
 			}
+			if(cloth == null)
+				continue;
+			t.onInteract(cloth, this);
+		}
+		for(Monster m : monsters){
+			Tower cloth = null;
+			double dist = 0;
+			for(Tower t : towers) {
+				if(cloth == null || t.getPos().distance(m.getPos()) < dist){
+					dist = t.getPos().distance(m.getPos());
+					cloth = t;
+				}
+			}
+			if(cloth == null)
+				continue;
+			m.onInteract(cloth, this);
 		}
 	}
 	public void draw(){

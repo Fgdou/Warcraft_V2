@@ -12,6 +12,6 @@ public class Zombie extends Monster {
                         new TextureImage("assets/images/zombie2.png"),
                         new TextureImage("assets/images/zombie3.png"),
                 }, 20),
-                5, .02, .5, false, 5);
+                10, .02, .5, false, 5);
     }
 }

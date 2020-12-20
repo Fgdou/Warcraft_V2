@@ -14,7 +14,7 @@ public class EnderMan extends Monster {
                 new TextureImage("assets/images/enderman3.png"),
                 new TextureImage("assets/images/enderman2.png"),
                 new TextureImage("assets/images/enderman3.png")
-        }, 20), 20, .025, .9, false, 15);
+        }, 20), 25, .025, .9, false, 7);
         setAttack(new Attack(this, 3, .025, 2, 120));
     }
     @Override

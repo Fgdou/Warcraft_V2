@@ -1,4 +1,4 @@
-wave 5 60
+wave 5 120
 Zombie
 
 wave 10 60
@@ -9,7 +9,11 @@ wave 20 50
 boss 1 1
 IronGolem
 
+wave 10 60
+Phamtom
+
 wave 50 40
+Phamtom
 
 boss 2 600
 Llama
@@ -19,8 +23,10 @@ EnderMan
 
 wave 200 20
 
-wave 500 5
-
-wave 500 5
+boss 10 100
 IronGolem
 Llama
+
+wave 500 10
+
+wave 10000 10
