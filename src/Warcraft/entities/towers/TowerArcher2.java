@@ -1,11 +1,10 @@
 package Warcraft.entities.towers;
 
 import Warcraft.Attack;
-import Warcraft.fx.textures.Texture;
-import Warcraft.fx.textures.TextureImage;
+import Warcraft.screen.textures.TextureImage;
 import Warcraft.tools.Vec2;
 
-public class TowerArcher2 extends Tower {
+public class TowerArcher2 extends TowerArcher {
     public TowerArcher2(Vec2 pos) {
         super(pos, new TextureImage("assets/images/archer2.png"), 250);
         setAttack(new Attack(this, 5, .4, 2.4, 50));

@@ -1,7 +1,7 @@
 package Warcraft.entities;
 
-import Warcraft.fx.Screen;
-import Warcraft.fx.textures.Texture;
+import Warcraft.screen.Screen;
+import Warcraft.screen.textures.Texture;
 import Warcraft.level.Level;
 import Warcraft.tools.Vec2;
 

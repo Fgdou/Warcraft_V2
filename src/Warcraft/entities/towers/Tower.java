@@ -4,13 +4,16 @@ import Warcraft.Attack;
 import Warcraft.entities.Entity;
 import Warcraft.entities.projectiles.Projectile;
 import Warcraft.entities.projectiles.ProjectileArrow;
-import Warcraft.fx.Screen;
-import Warcraft.fx.textures.Texture;
+import Warcraft.screen.Screen;
+import Warcraft.screen.textures.Texture;
 import Warcraft.level.Level;
 import Warcraft.tools.Vec2;
 
+import java.awt.*;
+
 public abstract class Tower extends Entity {
     private int pv;
+    private final int maxPv;
     private Attack attack;
 
     public Attack getAttack() {
@@ -20,6 +23,7 @@ public abstract class Tower extends Entity {
     public Tower(Vec2 pos, Texture texture, int pv) {
         super(pos, texture);
         this.pv = pv;
+        this.maxPv = pv;
     }
     public void setAttack(Attack attack){
         this.attack = attack;
@@ -32,13 +36,15 @@ public abstract class Tower extends Entity {
     @Override
     public void onDraw(Screen screen){
         getTexture().draw(screen, getPos(), 1, 0);
+        screen.drawProgressBar(getPos().add(new Vec2(0, -.4)), new Vec2(.4, .04), (double)pv/maxPv, Color.GREEN);
+        screen.drawProgressBar(getPos().add(new Vec2(0, .4)), new Vec2(.2, .02), (double)attack.getCooldown() / attack.getCooldownTime(), Color.RED);
     }
     @Override
     public void onInteract(Entity e, Level level){
         if(attack == null)
             return;
         if(attack.inRange(e) && attack.isReady()){
-            Projectile p = new ProjectileArrow(this, e, attack.getSpeed(), attack.getDamage());
+            Projectile p = getProjectile(e);
             level.addEntity(p);
             attack.reset();
         }
@@ -59,6 +65,7 @@ public abstract class Tower extends Entity {
     }
     public abstract Tower getUpgrade();
     public abstract int getCost();
+    public abstract Projectile getProjectile(Entity target);
 
     public void hurt(int damage){
         pv -= damage;

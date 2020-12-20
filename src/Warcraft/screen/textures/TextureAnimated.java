@@ -1,9 +1,8 @@
-package Warcraft.fx.textures;
+package Warcraft.screen.textures;
 
-import Warcraft.fx.Screen;
+import Warcraft.screen.Screen;
 import Warcraft.tools.Vec2;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

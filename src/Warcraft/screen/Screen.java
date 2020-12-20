@@ -1,4 +1,4 @@
-package Warcraft.fx;
+package Warcraft.screen;
 
 import Warcraft.StdDraw;
 import Warcraft.tools.Vec2;
@@ -32,25 +32,25 @@ public class Screen {
 
 	public Vec2 worldPosToScreen(Vec2 pos){
 		// (pos + 0.5) * tileSize * screenRatio
-		return pos.add(0.5).mul(getSizeTile()).mul(new Vec2(1, getRatio()));
+		return pos.add(0.5).mul(getSizeTile()).mul(new Vec2(1, getScreenRatio()));
 	}
 	public Vec2 worldScaleToScreen(Vec2 pos){
 		// pos * tileSize * screenRatio
-		return pos.mul(getSizeTile()).mul(new Vec2(1, getRatio()));
+		return pos.mul(getSizeTile()).mul(new Vec2(1, getScreenRatio()));
 	}
 	public Vec2 screenPosToWorld(Vec2 pos){
 		// pos / ratio / tileSize - 0.5
-		return pos.div(new Vec2(1, getRatio())).div(getSizeTile()).sub(0.5);
+		return pos.div(new Vec2(1, getScreenRatio())).div(getSizeTile()).sub(0.5);
 	}
 	public Vec2i screenPosToWorldTile(Vec2 pos) {
-		return (new Vec2i(pos.div(new Vec2(1, getRatio())).div(getSizeTile())));
+		return (new Vec2i(pos.div(new Vec2(1, getScreenRatio())).div(getSizeTile())));
 	}
 	public Vec2 screenScaleToWorld(Vec2 pos){
 		// pos / screenRatio / tileSize
-		return pos.div(getSizeTile()).div(new Vec2(1, getRatio()));
+		return pos.div(getSizeTile()).div(new Vec2(1, getScreenRatio()));
 	}
 
-	public double getRatio(){
+	public double getScreenRatio(){
 		return (double)size.x/size.y;
 	}
 	public Vec2i getSize() {
@@ -60,15 +60,30 @@ public class Screen {
 	public void drawRectangle(Vec2 pos, Vec2 halfSize, Color c){
 		pos = worldPosToScreen(pos);
 		halfSize = worldScaleToScreen(halfSize);
-		
+
+		drawRectangleAbsolute(pos, halfSize, c);
+	}
+	public void drawRectangleAbsolute(Vec2 pos, Vec2 halfSize, Color c){
 		StdDraw.setPenColor(c);
 		StdDraw.rectangle(pos.x, pos.y, halfSize.x, halfSize.y);
+	}
+	public void drawFilledRectangle(Vec2 pos, Vec2 halfSize, Color c){
+		pos = worldPosToScreen(pos);
+		halfSize = worldScaleToScreen(halfSize);
+
+		drawFilledRectangleAbsolute(pos, halfSize, c);
+	}
+	public void drawFilledRectangleAbsolute(Vec2 pos, Vec2 halfSize, Color c){
+		StdDraw.setPenColor(c);
+		StdDraw.filledRectangle(pos.x, pos.y, halfSize.x, halfSize.y);
+	}
+	public void drawImageAbsolute(Vec2 pos, Vec2 size, String file, double angle){
+		StdDraw.picture(pos.x, pos.y, file, size.x, size.y, angle);
 	}
 	public void drawImage(Vec2 pos, Vec2 size, String file, double angle){
 		pos = worldPosToScreen(pos);
 		size = worldScaleToScreen(size);
-		
-		StdDraw.picture(pos.x, pos.y, file, size.x, size.y, angle);
+		drawImageAbsolute(pos, size, file, angle);
 	}
 	public void drawCircle(Vec2 pos, double radius, Color c){
 		pos = worldPosToScreen(pos);
@@ -76,6 +91,34 @@ public class Screen {
 
 		StdDraw.setPenColor(c);
 		StdDraw.ellipse(pos.x, pos.y, size.x, size.y);
+	}
+
+	public void drawProgressBarAbsolute(Vec2 pos, Vec2 halfSize, double percent, Color c){
+		if(percent < 0)
+			percent = 0;
+		drawFilledRectangleAbsolute(pos, halfSize, Color.gray);
+
+		Vec2 rec = pos.sub(new Vec2(halfSize.x*(1-percent), 0));
+		Vec2 size = halfSize.mul(new Vec2(percent, 1));
+		drawFilledRectangleAbsolute(rec, size, c);
+	}
+	public void drawProgressBar(Vec2 pos, Vec2 halfSize, double percent, Color c){
+		pos = worldPosToScreen(pos);
+		halfSize = worldScaleToScreen(halfSize);
+
+		drawProgressBarAbsolute(pos, halfSize, percent, c);
+	}
+
+	public void drawTextImageRightAbsolute(Vec2 pos, int fontSize, Color c, String msg, String file){
+		double size = (double)fontSize/getSize().y;
+		Vec2 posImage = pos.sub(new Vec2(size, 0));
+		Vec2 posText = pos.sub(new Vec2(size*1.5, 0));
+
+		drawImageAbsolute(posImage, new Vec2(size/getScreenRatio(), size), file, 0);
+		drawTextRightAbsolute(posText, fontSize, c, msg);
+	}
+	public void drawTextImageRight(Vec2 pos, int fontSize, Color c, String msg, String file){
+		drawTextImageRightAbsolute(worldPosToScreen(pos), fontSize, c, msg, file);
 	}
 
 	public void drawTextLeftAbsolute(Vec2 pos, int fontSize, Color c, String msg){

@@ -1,7 +1,6 @@
 package Warcraft;
 
-import Warcraft.entities.monsters.Zombie;
-import Warcraft.fx.Screen;
+import Warcraft.screen.Screen;
 import Warcraft.level.Level;
 import Warcraft.level.PathRandom;
 import Warcraft.level.Wave;

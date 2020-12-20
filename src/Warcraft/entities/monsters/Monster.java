@@ -3,14 +3,16 @@ package Warcraft.entities.monsters;
 import Warcraft.Attack;
 import Warcraft.entities.Entity;
 import Warcraft.entities.projectiles.Projectile;
-import Warcraft.fx.Screen;
-import Warcraft.fx.textures.Texture;
+import Warcraft.screen.Screen;
+import Warcraft.screen.textures.Texture;
 import Warcraft.level.Level;
 import Warcraft.tools.Vec2;
-import Warcraft.tools.Vec2i;
+
+import java.awt.*;
 
 public abstract class Monster extends Entity {
     private int pv;
+    private final int maxPv;
     private double speed;
     private Vec2 lastPos;
     private double pos;
@@ -26,6 +28,7 @@ public abstract class Monster extends Entity {
     public Monster(Texture texture, int pv, double speed, double scale, boolean fly, int coinsKilled) {
         super(new Vec2(), texture);
         this.pv = pv;
+        this.maxPv = pv;
         this.speed = speed;
         this.pos = 0;
         this.scale = scale;
@@ -53,6 +56,7 @@ public abstract class Monster extends Entity {
         }
 
         lastPos = getPos();
+
         Vec2 actualPos = level.getPath().get(pos);
         setPos(actualPos);
 
@@ -61,6 +65,9 @@ public abstract class Monster extends Entity {
     }
     @Override
     public void onDraw(Screen screen){
+        if(lastPos.x == 0 && lastPos.y == 0)
+            return;
+
         Vec2 delta = getPos().sub(lastPos);
         double angle = 0;
 
@@ -72,9 +79,20 @@ public abstract class Monster extends Entity {
             angle = 270;
 
         getTexture().draw(screen, getPos(), scale, angle);
+        screen.drawProgressBar(getPos().add(new Vec2(0, .4)), new Vec2(.3, .04), (double)pv/maxPv, Color.GREEN);
+        if(getAttack() != null)
+            screen.drawProgressBar(getPos().add(new Vec2(0, .35)), new Vec2(.2, .02), (double)attack.getCooldown() / attack.getCooldownTime(), Color.RED);
     }
     @Override
-    public void onInteract(Entity e, Level level){}
+    public void onInteract(Entity e, Level level){
+        if(attack == null)
+            return;
+        if(attack.inRange(e) && attack.isReady()){
+            Projectile p = getProjectile(e);
+            level.addEntity(p);
+            attack.reset();
+        }
+    }
     @Override
     public void die(){
         pv = 0;
@@ -108,5 +126,8 @@ public abstract class Monster extends Entity {
             default:
                 return null;
         }
+    }
+    public Projectile getProjectile(Entity e){
+        return null;
     }
 }

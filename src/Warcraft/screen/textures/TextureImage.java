@@ -1,6 +1,6 @@
-package Warcraft.fx.textures;
+package Warcraft.screen.textures;
 
-import Warcraft.fx.Screen;
+import Warcraft.screen.Screen;
 import Warcraft.tools.Vec2;
 
 public class TextureImage extends Texture {

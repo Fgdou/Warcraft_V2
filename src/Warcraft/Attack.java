@@ -49,4 +49,11 @@ public class Attack {
     public void reset(){
         coolDown = 0;
     }
+
+    public int getCooldown() {
+        return coolDown;
+    }
+    public int getCooldownTime() {
+        return coolDownTime;
+    }
 }

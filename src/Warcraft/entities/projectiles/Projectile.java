@@ -3,8 +3,8 @@ package Warcraft.entities.projectiles;
 import Warcraft.entities.Entity;
 import Warcraft.entities.monsters.Monster;
 import Warcraft.entities.towers.Tower;
-import Warcraft.fx.Screen;
-import Warcraft.fx.textures.Texture;
+import Warcraft.screen.Screen;
+import Warcraft.screen.textures.Texture;
 import Warcraft.level.Level;
 import Warcraft.tools.Vec2;
 
@@ -43,4 +43,7 @@ public abstract class Projectile extends Entity {
     public void onDraw(Screen screen){
         getTexture().draw(screen, getPos(), scale, dir.getAngle());
     }
+
+    @Override
+    public void onInteract(Entity e, Level l){};
 }

@@ -11,3 +11,6 @@ IronGolem
 
 wave 100 30
 EnderMan
+
+wave 200 20
+IronGolem

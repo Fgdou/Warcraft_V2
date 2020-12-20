@@ -4,14 +4,12 @@ import Warcraft.Attack;
 import Warcraft.entities.Entity;
 import Warcraft.entities.monsters.Monster;
 import Warcraft.entities.projectiles.Projectile;
-import Warcraft.entities.projectiles.ProjectileArrow;
 import Warcraft.entities.projectiles.ProjectileBomb;
-import Warcraft.fx.textures.Texture;
-import Warcraft.fx.textures.TextureImage;
+import Warcraft.screen.textures.TextureImage;
 import Warcraft.level.Level;
 import Warcraft.tools.Vec2;
 
-public class TowerBomb1 extends Tower {
+public class TowerBomb1 extends TowerBomb {
     public TowerBomb1(Vec2 pos) {
         super(pos, new TextureImage("assets/images/bomb1.png"), 100);
         setAttack(new Attack(this, 10, .15, 1.7, 90));

@@ -7,8 +7,8 @@ import Warcraft.entities.projectiles.Projectile;
 import Warcraft.entities.towers.Tower;
 import Warcraft.entities.towers.TowerArcher1;
 import Warcraft.entities.towers.TowerBomb1;
-import Warcraft.fx.Screen;
-import Warcraft.fx.textures.Texture;
+import Warcraft.screen.Screen;
+import Warcraft.screen.textures.Texture;
 import Warcraft.tools.Vec2;
 import Warcraft.tools.Vec2i;
 
@@ -141,12 +141,26 @@ public class Level {
 		if(state == State.NewTower){
 			newTower.setPos(new Vec2(inputHandler.getMouseTile()));
 		}
-		if(inputHandler.getMouseClicked() && state == State.NewTower && coins >= newTower.getCost()){
-			addEntity(newTower);
-			newTower = newTower.copy();
-			coins -= newTower.getCost();
+		if(inputHandler.getMouseClicked()){
+			if(state == State.NewTower && coins >= newTower.getCost()) {
+				addEntity(newTower);
+				newTower = newTower.copy();
+				coins -= newTower.getCost();
+			}else if(state == State.UpgradeTower){
+				Tower founded = null;
+				for(Tower t : towers){
+					if(t.costUpgrade() <= coins && t.getPos().equals(new Vec2(inputHandler.getMouseTile()))){
+						founded = t;
+					}
+				}
+
+				if(founded != null){
+					coins -= founded.costUpgrade();
+					founded.die();
+					addEntity(founded.getUpgrade());
+				}
+			}
 		}
-		//TODO update towers
 	}
 	private void updateKeyboard() {
 		if(!inputHandler.hastNextKey())
@@ -214,6 +228,8 @@ public class Level {
 	}
 
 	public void addEntity(Entity e){
+		if(e == null)
+			return;
 		if(e instanceof Monster)
 			monsters.add((Monster)e);
 		else if(e instanceof Tower)
@@ -250,6 +266,7 @@ public class Level {
 
 			screen.drawCircle(newTower.getPos(), newTower.getAttack().getRange(), c);
 			screen.drawRectangle(newTower.getPos(), new Vec2(.45, .45), c);
+			screen.drawTextImageRight(newTower.getPos().add(new Vec2(.7, .5)), 20, Color.BLACK, String.valueOf(newTower.getCost()), "assets/images/coin.png");
 		}
 
 		if(state == State.UpgradeTower)
@@ -259,17 +276,22 @@ public class Level {
 				if(t.isUpgradable()){
 					if(t.costUpgrade() > coins)
 						c = Color.RED;
-					else
+					else if(t.getPos().equals(new Vec2(inputHandler.getMouseTile()))){
+						c = Color.orange;
+					}else
 						c = Color.GREEN;
 				}
 
 				screen.drawCircle(t.getPos(), t.getAttack().getRange(), c);
 				screen.drawRectangle(t.getPos(), new Vec2(.45, .45), c);
+				if(t.isUpgradable()){
+					screen.drawTextImageRight(t.getPos().add(new Vec2(.7, .5)), 20, c, String.valueOf(t.costUpgrade()), "assets/images/coin.png");
+				}
 			}
 	}
 	private void drawInfos(){
-		screen.drawTextRightAbsolute(new Vec2(1, 0.98), 20, Color.BLACK, String.valueOf(coins));
-		screen.drawTextRightAbsolute(new Vec2(1, 0.95), 20, Color.BLACK, String.valueOf(lives));
+		screen.drawTextImageRightAbsolute(new Vec2(1, 0.96), 30, Color.BLACK, String.valueOf(coins), "assets/images/coin.png");
+		screen.drawTextImageRightAbsolute(new Vec2(1, 0.92), 30, Color.BLACK, String.valueOf(lives), "assets/images/heart.png");
 	}
 
 	public void hurt(int damage){

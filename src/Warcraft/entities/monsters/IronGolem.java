@@ -1,8 +1,7 @@
 package Warcraft.entities.monsters;
 
-import Warcraft.fx.textures.Texture;
-import Warcraft.fx.textures.TextureAnimated;
-import Warcraft.fx.textures.TextureImage;
+import Warcraft.screen.textures.TextureAnimated;
+import Warcraft.screen.textures.TextureImage;
 
 public class IronGolem extends Monster {
     public IronGolem() {
@@ -11,6 +10,6 @@ public class IronGolem extends Monster {
                 new TextureImage("assets/images/ironGolem1.png"),
                 new TextureImage("assets/images/ironGolem2.png"),
                 new TextureImage("assets/images/ironGolem1.png")
-        },90), 100, .01, 1.1, false, 80);
+        },60), 100, .01, 1.1, false, 80);
     }
 }

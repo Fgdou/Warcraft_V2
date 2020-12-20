@@ -1,6 +1,6 @@
 package Warcraft;
 
-import Warcraft.fx.Screen;
+import Warcraft.screen.Screen;
 import Warcraft.tools.Vec2;
 import Warcraft.tools.Vec2i;
 
