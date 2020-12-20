@@ -1,8 +1,6 @@
-package Warcraft;
+package Warcraft.tools;
 
 import Warcraft.screen.Screen;
-import Warcraft.tools.Vec2;
-import Warcraft.tools.Vec2i;
 
 import java.util.Iterator;
 import java.util.Set;

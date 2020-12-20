@@ -4,6 +4,7 @@ import Warcraft.screen.Screen;
 import Warcraft.level.Level;
 import Warcraft.level.PathRandom;
 import Warcraft.level.Wave;
+import Warcraft.tools.InputHandler;
 import Warcraft.tools.Vec2;
 import Warcraft.tools.Vec2i;
 
@@ -25,7 +26,6 @@ public class Game {
 		inputHandler = new InputHandler(screen);
 		level = new Level(screen, inputHandler, new PathRandom(screen.getnTiles(), new Vec2i(1,1)), new Wave("assets/levels/level1.txt"));
 		running = true;
-
 	}
 
 	public void tick(){

@@ -1,6 +1,6 @@
 package Warcraft.level;
 
-import Warcraft.InputHandler;
+import Warcraft.tools.InputHandler;
 import Warcraft.entities.Entity;
 import Warcraft.entities.monsters.Monster;
 import Warcraft.entities.projectiles.Projectile;
@@ -122,18 +122,20 @@ public class Level {
 		if(tickEnable)
 			return;
 
-		updateEntities();
-		updateKeyboard();
-		updateState();
+		for(int i=0; i<tickSpeed; i++){
+			updateEntities();
+			updateKeyboard();
+			updateState();
 
-		if(waves.hasNext()){
-			if(!hasMob())
-				waves.startWave();
+			if(waves.hasNext()){
+				if(!hasMob())
+					waves.startWave();
 
-			Monster m = waves.getNext();
+				Monster m = waves.getNext();
 
-			if(m != null)
-				addEntity(m);
+				if(m != null)
+					addEntity(m);
+			}
 		}
 	}
 
@@ -175,9 +177,13 @@ public class Level {
 		}else if(c == 'b'){
 			state = State.NewTower;
 			newTower = new TowerBomb1(new Vec2(inputHandler.getMouseTile()));
-		}else{
+		}else if(c == ' '){
+			tickSpeed += 5;
+		} else{
 			state = State.Normal;
+			setSpeed(1);
 		}
+
 		if(c == 'q')
 			stop();
 	}

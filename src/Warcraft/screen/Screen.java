@@ -1,6 +1,6 @@
 package Warcraft.screen;
 
-import Warcraft.StdDraw;
+import Warcraft.tools.StdDraw;
 import Warcraft.tools.Vec2;
 import Warcraft.tools.Vec2i;
 

@@ -1,6 +1,6 @@
 package Warcraft.entities.monsters;
 
-import Warcraft.Attack;
+import Warcraft.entities.Attack;
 import Warcraft.entities.Entity;
 import Warcraft.entities.projectiles.Projectile;
 import Warcraft.entities.projectiles.ProjectileEnderpearl;

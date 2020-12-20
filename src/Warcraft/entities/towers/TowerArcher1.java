@@ -1,8 +1,6 @@
 package Warcraft.entities.towers;
 
-import Warcraft.Attack;
-import Warcraft.entities.Entity;
-import Warcraft.entities.projectiles.Projectile;
+import Warcraft.entities.Attack;
 import Warcraft.screen.textures.TextureImage;
 import Warcraft.tools.Vec2;
 

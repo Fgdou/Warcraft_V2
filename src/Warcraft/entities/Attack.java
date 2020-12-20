@@ -1,4 +1,4 @@
-package Warcraft;
+package Warcraft.entities;
 
 import Warcraft.entities.Entity;
 import Warcraft.entities.projectiles.Projectile;

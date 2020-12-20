@@ -1,6 +1,6 @@
 package Warcraft.entities.towers;
 
-import Warcraft.Attack;
+import Warcraft.entities.Attack;
 import Warcraft.entities.Entity;
 import Warcraft.entities.monsters.Monster;
 import Warcraft.entities.projectiles.Projectile;
