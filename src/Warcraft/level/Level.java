@@ -151,7 +151,7 @@ public class Level {
 			}else if(state == State.UpgradeTower){
 				Tower founded = null;
 				for(Tower t : towers){
-					if(t.costUpgrade() <= coins && t.getPos().equals(new Vec2(inputHandler.getMouseTile()))){
+					if(t.costUpgrade() <= coins && t.isUpgradable() && t.getPos().equals(new Vec2(inputHandler.getMouseTile()))){
 						founded = t;
 					}
 				}
@@ -179,7 +179,7 @@ public class Level {
 			newTower = new TowerBomb1(new Vec2(inputHandler.getMouseTile()));
 		}else if(c == ' '){
 			tickSpeed += 5;
-		} else{
+		}else{
 			state = State.Normal;
 			setSpeed(1);
 		}
@@ -270,30 +270,29 @@ public class Level {
 			if(newTower.getCost() > coins)
 				c = Color.RED;
 
-			screen.drawCircle(newTower.getPos(), newTower.getAttack().getRange(), c);
 			screen.drawRectangle(newTower.getPos(), new Vec2(.45, .45), c);
+			screen.drawCircle(newTower.getPos(), newTower.getAttack().getRange(), Color.BLACK);
 			screen.drawTextImageRight(newTower.getPos().add(new Vec2(.7, .5)), 20, Color.BLACK, String.valueOf(newTower.getCost()), "assets/images/coin.png");
 		}
+		for(Tower t : towers){
+			Color c = Color.GRAY;
 
-		if(state == State.UpgradeTower)
-			for(Tower t : towers){
-				Color c = Color.GRAY;
-
-				if(t.isUpgradable()){
-					if(t.costUpgrade() > coins)
-						c = Color.RED;
-					else if(t.getPos().equals(new Vec2(inputHandler.getMouseTile()))){
-						c = Color.orange;
-					}else
-						c = Color.GREEN;
-				}
-
-				screen.drawCircle(t.getPos(), t.getAttack().getRange(), c);
+			if(state == State.UpgradeTower && t.isUpgradable()){
+				if(t.costUpgrade() > coins)
+					c = Color.RED;
+				else if(t.getPos().equals(new Vec2(inputHandler.getMouseTile()))){
+					c = Color.orange;
+				}else
+					c = Color.GREEN;
 				screen.drawRectangle(t.getPos(), new Vec2(.45, .45), c);
 				if(t.isUpgradable()){
 					screen.drawTextImageRight(t.getPos().add(new Vec2(.7, .5)), 20, c, String.valueOf(t.costUpgrade()), "assets/images/coin.png");
 				}
 			}
+			if((state == State.UpgradeTower || state == State.Normal) && t.getPos().equals(new Vec2(inputHandler.getMouseTile()))){
+				screen.drawCircle(t.getPos(), t.getAttack().getRange(), Color.BLACK);
+			}
+		}
 	}
 	private void drawInfos(){
 		screen.drawTextImageRightAbsolute(new Vec2(1, 0.96), 30, Color.BLACK, String.valueOf(coins), "assets/images/coin.png");

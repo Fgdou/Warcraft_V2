@@ -2,6 +2,7 @@ package Warcraft.entities.towers;
 
 import Warcraft.entities.Attack;
 import Warcraft.entities.Entity;
+import Warcraft.entities.monsters.Monster;
 import Warcraft.entities.projectiles.Projectile;
 import Warcraft.screen.Screen;
 import Warcraft.screen.textures.Texture;
@@ -14,15 +15,17 @@ public abstract class Tower extends Entity {
     private int pv;
     private final int maxPv;
     private Attack attack;
+    private boolean attackFly;
 
     public Attack getAttack() {
         return attack;
     }
 
-    public Tower(Vec2 pos, Texture texture, int pv) {
+    public Tower(Vec2 pos, Texture texture, int pv, boolean attackFly) {
         super(pos, texture);
         this.pv = pv;
         this.maxPv = pv;
+        this.attackFly = attackFly;
     }
     public void setAttack(Attack attack){
         this.attack = attack;
@@ -41,6 +44,8 @@ public abstract class Tower extends Entity {
     @Override
     public void onInteract(Entity e, Level level){
         if(attack == null)
+            return;
+        if(!attackFly && e instanceof Monster && ((Monster) e).getFly())
             return;
         if(attack.inRange(e) && attack.isReady()){
             Projectile p = getProjectile(e);

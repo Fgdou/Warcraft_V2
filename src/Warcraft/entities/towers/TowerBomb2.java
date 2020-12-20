@@ -1,28 +1,29 @@
 package Warcraft.entities.towers;
 
 import Warcraft.entities.Attack;
+import Warcraft.screen.textures.Texture;
 import Warcraft.screen.textures.TextureImage;
 import Warcraft.tools.Vec2;
 
-public class TowerArcher2 extends TowerArcher {
-    public TowerArcher2(Vec2 pos) {
-        super(pos, new TextureImage("assets/images/archer2.png"), 250);
-        setAttack(new Attack(this, 5, .4, 2.4, 50));
+public class TowerBomb2 extends TowerBomb {
+    public TowerBomb2(Vec2 pos) {
+        super(pos, new TextureImage("assets/images/bomb2.png"), 250);
+        setAttack(new Attack(this, 15, .15, 2, 70));
     }
 
     @Override
     public Tower copy() {
-        return new TowerArcher2(getPos());
+        return new TowerBomb2(getPos());
     }
 
     @Override
     public int costUpgrade() {
-        return 100;
+        return 150;
     }
 
     @Override
     public Tower getUpgrade() {
-        return new TowerArcher3(getPos());
+        return new TowerBomb3(getPos());
     }
 
     @Override

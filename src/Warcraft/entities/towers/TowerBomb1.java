@@ -22,12 +22,12 @@ public class TowerBomb1 extends TowerBomb {
 
     @Override
     public int costUpgrade() {
-        return 0;
+        return 50;
     }
 
     @Override
     public Tower getUpgrade() {
-        return null;
+        return new TowerBomb2(getPos());
     }
 
     @Override

@@ -8,7 +8,7 @@ import Warcraft.tools.Vec2;
 
 public abstract class TowerBomb extends Tower {
     public TowerBomb(Vec2 pos, Texture texture, int pv) {
-        super(pos, texture, pv);
+        super(pos, texture, pv, false);
     }
     @Override
     public Projectile getProjectile(Entity e){

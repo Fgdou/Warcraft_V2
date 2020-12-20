@@ -8,7 +8,7 @@ import Warcraft.tools.Vec2;
 
 public abstract class TowerArcher extends Tower {
     public TowerArcher(Vec2 pos, Texture texture, int pv) {
-        super(pos, texture, pv);
+        super(pos, texture, pv, true);
     }
 
     @Override
