@@ -33,7 +33,7 @@ public class Level {
 	}
 
 	private PathRandom path;
-	private Wave waves;
+	private Wave wave;
 	private Screen screen;
 	private InputHandler inputHandler;
 
@@ -55,10 +55,10 @@ public class Level {
 	private int coins;
 	private int lives;
 	
-	public Level(Screen screen, InputHandler inputHandler, PathRandom path, Wave waves){
+	public Level(Screen screen, InputHandler inputHandler, PathRandom path, Wave wave){
 		this.screen = screen;
 		this.path = path;
-		this.waves = waves;
+		this.wave = wave;
 		this.inputHandler = inputHandler;
 
 		tiles = new Tiles[screen.getnTiles().y][screen.getnTiles().x];
@@ -98,6 +98,8 @@ public class Level {
 		tiles[castle.y][castle.x] = Tiles.CASTLE;
 	}
 	private boolean isTileFree(Vec2i pos){
+		if(pos.x < 0 || pos.y < 0 || pos.y >= tiles.length || pos.x >= tiles[0].length)
+			return false;
 		return tiles[pos.y][pos.x] == Tiles.EMPTY;
 	}
 
@@ -127,11 +129,11 @@ public class Level {
 			updateKeyboard();
 			updateState();
 
-			if(waves.hasNext()){
+			if(wave.hasNext()){
 				if(!hasMob())
-					waves.startWave();
+					wave.startWave();
 
-				Monster m = waves.getNext();
+				Monster m = wave.getNext();
 
 				if(m != null)
 					addEntity(m);
@@ -150,7 +152,7 @@ public class Level {
 			newTower.setPos(new Vec2(mouse));
 		}
 		if(inputHandler.getMouseClicked()){
-			if(state == State.NewTower && coins >= newTower.getCost() && tiles[mouse.y][mouse.x] == Tiles.EMPTY) {
+			if(state == State.NewTower && coins >= newTower.getCost() && isTileFree(mouse)) {
 				addEntity(newTower);
 				newTower = newTower.copy();
 				coins -= newTower.getCost();
@@ -292,13 +294,13 @@ public class Level {
 		Texture.CASTLE.draw(screen, new Vec2(castle), 1, 0);
 		Texture.SPAWN.draw(screen, new Vec2(spawn), 1, 0);
 
-		screen.drawProgressBar((new Vec2(spawn)).add(new Vec2(0, -.5)), new Vec2(.5, .1), waves.getPercent(), Color.BLUE);
+		screen.drawProgressBar((new Vec2(spawn)).add(new Vec2(0, -.5)), new Vec2(.5, .1), wave.getPercent(), Color.BLUE);
 	}
 	private void drawState(){
 		if(state == State.NewTower && newTower != null){
 			newTower.onDraw(screen);
 			Color c = Color.GREEN;
-			if(newTower.getCost() > coins || tiles[(int)newTower.getPos().y][(int)newTower.getPos().x] != Tiles.EMPTY)
+			if(newTower.getCost() > coins || !isTileFree(new Vec2i(newTower.getPos())))
 				c = Color.RED;
 
 			screen.drawRectangle(newTower.getPos(), new Vec2(.45, .45), c);
@@ -340,8 +342,8 @@ public class Level {
 	public PathRandom getPath() {
 		return path;
 	}
-	public Wave getWaves() {
-		return waves;
+	public Wave getWave() {
+		return wave;
 	}
 	public Screen getScreen() {
 		return screen;

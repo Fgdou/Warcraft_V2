@@ -37,7 +37,7 @@ public abstract class Tower extends Entity {
     @Override
     public void onTick(Level level){
         cntTps++;
-        if(cntTps > 300 || level.getWaves().isWatingNextWave() && cntTps >= (60*10)/maxPv){
+        if(cntTps > 300 || level.getWave().isWatingNextWave() && cntTps >= (60*10)/maxPv){
             if(pv < maxPv)
                 pv += 1;
             cntTps = 0;
