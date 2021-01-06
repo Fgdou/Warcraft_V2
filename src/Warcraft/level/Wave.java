@@ -61,7 +61,7 @@ public class Wave {
                 String[] tab = line.split(" ");
                 nbMonsters.add(Integer.parseInt(tab[1]));
                 cooldowns.add(Integer.parseInt(tab[2]));
-            }else{
+            }else if(!line.equals("")){
                 current.add(line);
             }
         }
