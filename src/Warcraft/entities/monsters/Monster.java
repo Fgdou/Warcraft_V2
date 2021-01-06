@@ -15,27 +15,43 @@ public abstract class Monster extends Entity {
     private final int maxPv;
     private double speed;
     private Vec2 lastPos;
-    private double pos;
+    private double timeStart;
     private double scale;
     private boolean fly;
     private Attack attack;
     private int coinsKilled;
 
+    /**
+     * @return the attack of the monster
+     */
     public Attack getAttack() {
         return attack;
     }
 
+    /**
+     * @param texture       Texture of the monster
+     * @param pv            Hearts of the monster
+     * @param speed         Speed in tile per ticks
+     * @param scale         Scale where 1 is the full tile
+     * @param fly           If the monster is flying
+     * @param coinsKilled   The coins to give to the player when killed
+     */
     public Monster(Texture texture, int pv, double speed, double scale, boolean fly, int coinsKilled) {
         super(new Vec2(), texture);
         this.pv = pv;
         this.maxPv = pv;
         this.speed = speed;
-        this.pos = 0;
+        this.timeStart = 0;
         this.scale = scale;
         this.fly = fly;
         this.lastPos = getPos();
         this.coinsKilled = coinsKilled;
     }
+
+    /**
+     * Set the attack of the monster. Has to be called in the constructor
+     * @param attack
+     */
     public void setAttack(Attack attack){
         this.attack = attack;
     }
@@ -45,9 +61,10 @@ public abstract class Monster extends Entity {
         if(attack != null)
             attack.cool();
 
-        pos += speed;
+        timeStart += speed;
 
-        if(pos >= level.getPath().length()-1) {
+        //The monster touch the castle
+        if(timeStart >= level.getPath().length()-1) {
             die();
             if(getAttack() == null)
                 level.hurt(1);
@@ -57,27 +74,27 @@ public abstract class Monster extends Entity {
 
         lastPos = getPos();
 
-        Vec2 actualPos = level.getPath().get(pos);
+        //Get position by the path
+        Vec2 actualPos = level.getPath().get(timeStart);
         setPos(actualPos);
-
-        if(actualPos.equals(new Vec2(level.getCastle())))
-            die();
     }
     @Override
     public void onDraw(Screen screen){
         if(lastPos.x == 0 && lastPos.y == 0)
             return;
 
-        Vec2 delta = getPos().sub(lastPos);
+        //Calc the angle
+        Vec2 deltaPos = getPos().sub(lastPos);
         double angle = 0;
 
-        if(delta.x > 0)
+        if(deltaPos.x > 0)
             angle = 90;
-        else if(delta.y > 0)
+        else if(deltaPos.y > 0)
             angle = 180;
-        else if(delta.x < 0)
+        else if(deltaPos.x < 0)
             angle = 270;
 
+        //Draw with the angle
         getTexture().draw(screen, getPos(), scale, angle);
         screen.drawProgressBar(getPos().add(new Vec2(0, .4)), new Vec2(.3, .04), (double)pv/maxPv, Color.GREEN);
         if(getAttack() != null)
@@ -90,7 +107,7 @@ public abstract class Monster extends Entity {
         if(attack.inRange(e) && attack.isReady()){
             Projectile p = getProjectile(e);
             level.addEntity(p);
-            attack.reset();
+            attack.resetCoolDown();
         }
     }
     @Override
@@ -102,17 +119,32 @@ public abstract class Monster extends Entity {
         return (pv > 0);
     }
 
+    /**
+     * Give damage to the monster
+     * @param damage number of heart
+     */
     public void hurt(int damage){
         pv -= damage;
     }
 
+    /**
+     * @return if the monster is flying
+     */
     public boolean getFly(){
         return fly;
     }
+
+    /**
+     * @return the coins for the player when the monster is killed
+     */
     public int getCoinsKilled(){
         return coinsKilled;
     }
 
+    /**
+     * @param name  of the monster
+     * @return      A new instance of the monster
+     */
     public static Monster getByName(String name){
         switch (name){
             case "Zombie":
@@ -131,6 +163,11 @@ public abstract class Monster extends Entity {
                 return null;
         }
     }
+
+    /**
+     * @param e The entity to target
+     * @return  The projectile if the monster has an attack
+     */
     public Projectile getProjectile(Entity e){
         return null;
     }

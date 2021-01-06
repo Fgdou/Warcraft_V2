@@ -1,5 +1,9 @@
 package Warcraft.tools;
 
+/**
+ * Vector 2D double
+ */
+
 public class Vec2 {
 	public double x, y;
 	
@@ -67,7 +71,7 @@ public class Vec2 {
 	public Vec2 div(Vec2 v){
 		return new Vec2(x/v.x, y/v.y);
 	}
-	
+
 	public Vec2 normalize(){
 		double r = abs();
 		return new Vec2(x/r, y/r);

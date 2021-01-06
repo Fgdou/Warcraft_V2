@@ -1,5 +1,9 @@
 package Warcraft.tools;
 
+/**
+ * Vector 2D Integer
+ */
+
 public class Vec2i {
 	public int x, y;
 	

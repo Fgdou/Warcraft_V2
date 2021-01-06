@@ -33,7 +33,7 @@ public class Level {
 	}
 
 	private PathRandom path;
-	private Wave wave;
+	private Wave waves;
 	private Screen screen;
 	private InputHandler inputHandler;
 
@@ -46,19 +46,25 @@ public class Level {
 	private List<Projectile> projectiles;
 
 	private boolean tickEnable;
-	private int tickSpeed;
+	private int gameSpeed;
 	private boolean ended;
 
-	private State state;
-	private Tower newTower;
+	private State selectedState;
+	private Tower stateNewTower;
 
 	private int coins;
 	private int lives;
-	
-	public Level(Screen screen, InputHandler inputHandler, PathRandom path, Wave wave){
+
+	/**
+	 * @param screen			the screen to render to
+	 * @param inputHandler		the inputs for the game
+	 * @param path				the path already filled
+	 * @param waves				the waves for the game
+	 */
+	public Level(Screen screen, InputHandler inputHandler, PathRandom path, Wave waves){
 		this.screen = screen;
 		this.path = path;
-		this.wave = wave;
+		this.waves = waves;
 		this.inputHandler = inputHandler;
 
 		tiles = new Tiles[screen.getnTiles().y][screen.getnTiles().x];
@@ -68,15 +74,18 @@ public class Level {
 
 		tickEnable = false;
 		ended = false;
-		tickSpeed = 1;
-		state = State.Normal;
-		newTower = null;
+		gameSpeed = 1;
+		selectedState = State.Normal;
+		stateNewTower = null;
 		lives = 20;
 		coins = 100;
 
 		fillTilesWithPath();
 	}
 
+	/**
+	 * Fill the array with the path
+	 */
 	private void fillTilesWithPath() {
 		//Clearing the table
 		for (Tiles[] tile : tiles) {
@@ -97,43 +106,74 @@ public class Level {
 		castle = new Vec2i(path.get(path.length()-1));
 		tiles[castle.y][castle.x] = Tiles.CASTLE;
 	}
+
+	/**
+	 * @param pos 	Position on the array of a tile
+	 * @return		If this tile is free to place a tower
+	 */
 	private boolean isTileFree(Vec2i pos){
 		if(pos.x < 0 || pos.y < 0 || pos.y >= tiles.length || pos.x >= tiles[0].length)
 			return false;
 		return tiles[pos.y][pos.x] == Tiles.EMPTY;
 	}
 
+	/**
+	 * @return if the game is finished
+	 */
 	public boolean ended(){
 		return ended;
 	}
+
+	/**
+	 * Stop the game
+	 */
 	public void stop(){
 		ended = true;
 		tickEnable = false;
 	}
+	/**
+	 * Start the game
+	 */
 	public void start(){
 		tickEnable = true;
 	}
+	/**
+	 * Pause the game
+	 */
 	public void pause(){
 		tickEnable = false;
 	}
+
+	/**
+	 * Set the speed of the game. 1 is 60 ticks per sec
+	 * @param factor  1 default and more
+	 */
 	public void setSpeed(int factor){
-		tickSpeed = factor;
+		gameSpeed = factor;
 	}
 
+	/**
+	 * Calc all the positions and animamtions
+	 */
 	public void tick() {
-		if(tickEnable)
-			return;
 
-		for(int i=0; i<tickSpeed; i++){
+		//Check is the game run
+		if(!tickEnable) {
+			updateKeyboard();
+			return;
+		}
+
+		//Execute the ticks with the speed value (1 is default)
+		for(int i = 0; i< gameSpeed; i++){
 			updateEntities();
 			updateKeyboard();
 			updateState();
 
-			if(wave.hasNext()){
+			if(waves.hasNext()){
 				if(!hasMob())
-					wave.startWave();
+					waves.startWave();
 
-				Monster m = wave.getNext();
+				Monster m = waves.getNext();
 
 				if(m != null)
 					addEntity(m);
@@ -146,18 +186,28 @@ public class Level {
 		}
 	}
 
+	/**
+	 * Logic for the placement and the upgrade
+	 */
 	private void updateState(){
+
+		//Position of the mouse
 		Vec2i mouse = inputHandler.getMouseTile();
-		if(state == State.NewTower){
-			newTower.setPos(new Vec2(mouse));
+		if(selectedState == State.NewTower){
+			stateNewTower.setPos(new Vec2(mouse));
 		}
+
+		//If mouse click
 		if(inputHandler.getMouseClicked()){
-			if(state == State.NewTower && coins >= newTower.getCost() && isTileFree(mouse)) {
-				addEntity(newTower);
-				newTower = newTower.copy();
-				coins -= newTower.getCost();
+
+			if(selectedState == State.NewTower && coins >= stateNewTower.getCost() && isTileFree(mouse)) {
+				//Place the tower
+				addEntity(stateNewTower);
+				stateNewTower = stateNewTower.copy();
+				coins -= stateNewTower.getCost();
 				tiles[mouse.y][mouse.x] = Tiles.TOWER;
-			}else if(state == State.UpgradeTower){
+			}else if(selectedState == State.UpgradeTower){
+				//Upgrade the tower
 				Tower founded = null;
 				for(Tower t : towers){
 					if(t.costUpgrade() <= coins && t.isUpgradable() && t.getPos().equals(new Vec2(mouse))){
@@ -173,30 +223,42 @@ public class Level {
 			}
 		}
 	}
+
+	/**
+	 * Logic for the keyboard
+	 */
 	private void updateKeyboard() {
 		if(!inputHandler.hastNextKey())
 			return;
 
 		char c = inputHandler.getNextKey();
 		if(c == 'e')
-			state = State.UpgradeTower;
+			selectedState = State.UpgradeTower;
 		else if(c == 'a') {
-			state = State.NewTower;
-			newTower = new TowerArcher1(new Vec2(inputHandler.getMouseTile()));
+			selectedState = State.NewTower;
+			stateNewTower = new TowerArcher1(new Vec2(inputHandler.getMouseTile()));
 		}else if(c == 'b'){
-			state = State.NewTower;
-			newTower = new TowerBomb1(new Vec2(inputHandler.getMouseTile()));
+			selectedState = State.NewTower;
+			stateNewTower = new TowerBomb1(new Vec2(inputHandler.getMouseTile()));
 		}else if(c == ' '){
-			tickSpeed += 5;
+			gameSpeed += 5;
+		}else if(c == 's'){
+			start();
 		}else{
-			state = State.Normal;
+			selectedState = State.Normal;
 			setSpeed(1);
 		}
 
 		if(c == 'q')
 			stop();
 	}
+
+	/**
+	 * Logic for all the entities
+	 */
 	public void updateEntities(){
+
+		//Towers
 		Iterator<Tower> it = towers.iterator();
 		while(it.hasNext()){
 			Tower t = it.next();
@@ -207,6 +269,7 @@ public class Level {
 			}
 		}
 
+		//Monsters
 		Iterator<Monster> im = monsters.iterator();
 		while(im.hasNext()){
 			Monster t = im.next();
@@ -215,6 +278,7 @@ public class Level {
 				im.remove();
 		}
 
+		//Projectiles
 		Iterator<Projectile> ip = projectiles.iterator();
 		while(ip.hasNext()){
 			Projectile t = ip.next();
@@ -223,6 +287,7 @@ public class Level {
 				ip.remove();
 		}
 
+		//Towers and monsters -> interactions
 		for(Tower t : towers){
 			Monster cloth = null;
 			double dist = 0;
@@ -250,6 +315,10 @@ public class Level {
 			m.onInteract(cloth, this);
 		}
 	}
+
+	/**
+	 * Draw everything on the screen
+	 */
 	public void draw(){
 		drawBackground();
 
@@ -264,6 +333,10 @@ public class Level {
 		drawInfos();
 	}
 
+	/**
+	 * Add an entity to the list of tick and draw
+	 * @param e the entity to add
+	 */
 	public void addEntity(Entity e){
 		if(e == null)
 			return;
@@ -276,6 +349,10 @@ public class Level {
 		else
 			throw new RuntimeException("e not found");
 	}
+
+	/**
+	 * Draw grass spawn and castle, with the progress bar of the wave
+	 */
 	private void drawBackground(){
 		for(int i=0; i<screen.getnTiles().y; i++){
 			for(int j=0; j<screen.getnTiles().x; j++){
@@ -294,23 +371,27 @@ public class Level {
 		Texture.CASTLE.draw(screen, new Vec2(castle), 1, 0);
 		Texture.SPAWN.draw(screen, new Vec2(spawn), 1, 0);
 
-		screen.drawProgressBar((new Vec2(spawn)).add(new Vec2(0, -.5)), new Vec2(.5, .1), wave.getPercent(), Color.BLUE);
+		screen.drawProgressBar((new Vec2(spawn)).add(new Vec2(0, -.5)), new Vec2(.5, .1), waves.getPercent(), Color.BLUE);
 	}
+
+	/**
+	 * Draw the mouse when adding or upgrading tower
+	 */
 	private void drawState(){
-		if(state == State.NewTower && newTower != null){
-			newTower.onDraw(screen);
+		if(selectedState == State.NewTower && stateNewTower != null){
+			stateNewTower.onDraw(screen);
 			Color c = Color.GREEN;
-			if(newTower.getCost() > coins || !isTileFree(new Vec2i(newTower.getPos())))
+			if(stateNewTower.getCost() > coins || !isTileFree(new Vec2i(stateNewTower.getPos())))
 				c = Color.RED;
 
-			screen.drawRectangle(newTower.getPos(), new Vec2(.45, .45), c);
-			screen.drawCircle(newTower.getPos(), newTower.getAttack().getRange(), Color.BLACK);
-			screen.drawTextImageRight(newTower.getPos().add(new Vec2(.7, .5)), 20, Color.BLACK, String.valueOf(newTower.getCost()), "assets/images/coin.png");
+			screen.drawRectangle(stateNewTower.getPos(), new Vec2(.45, .45), c);
+			screen.drawCircle(stateNewTower.getPos(), stateNewTower.getAttack().getRange(), Color.BLACK);
+			screen.drawTextImageRight(stateNewTower.getPos().add(new Vec2(.7, .5)), 20, Color.BLACK, String.valueOf(stateNewTower.getCost()), "assets/images/coin.png");
 		}
 		for(Tower t : towers){
 			Color c = Color.GRAY;
 
-			if(state == State.UpgradeTower && t.isUpgradable()){
+			if(selectedState == State.UpgradeTower && t.isUpgradable()){
 				if(t.costUpgrade() > coins)
 					c = Color.RED;
 				else if(t.getPos().equals(new Vec2(inputHandler.getMouseTile()))){
@@ -322,41 +403,81 @@ public class Level {
 					screen.drawTextImageRight(t.getPos().add(new Vec2(.7, .5)), 20, c, String.valueOf(t.costUpgrade()), "assets/images/coin.png");
 				}
 			}
-			if((state == State.UpgradeTower || state == State.Normal) && t.getPos().equals(new Vec2(inputHandler.getMouseTile()))){
+			if((selectedState == State.UpgradeTower || selectedState == State.Normal) && t.getPos().equals(new Vec2(inputHandler.getMouseTile()))){
 				screen.drawCircle(t.getPos(), t.getAttack().getRange(), Color.BLACK);
 			}
 		}
 	}
+
+	/**
+	 * Draw life and coins
+	 */
 	private void drawInfos(){
 		screen.drawTextImageRightAbsolute(new Vec2(1, 0.96), 30, Color.BLACK, String.valueOf(coins), "assets/images/coin.png");
 		screen.drawTextImageRightAbsolute(new Vec2(1, 0.92), 30, Color.BLACK, String.valueOf(lives), "assets/images/heart.png");
 	}
 
+	/**
+	 * Remove lives on the game
+	 * @param damage number of hurts
+	 */
 	public void hurt(int damage){
 		lives -= damage;
 	}
 
+	/**
+	 * @return if there is any mob on the tiles
+	 */
 	public boolean hasMob(){
 		return (monsters.size() != 0);
 	}
+
+	/**
+	 * @return the path of the level
+	 */
 	public PathRandom getPath() {
 		return path;
 	}
-	public Wave getWave() {
-		return wave;
+
+	/**
+	 * @return the waves of the level
+	 */
+	public Wave getWaves() {
+		return waves;
 	}
+
+	/**
+	 * @return the screen of the level
+	 */
 	public Screen getScreen() {
 		return screen;
 	}
+
+	/**
+	 * @return the input handler of the level
+	 */
 	public InputHandler getInputHandler() {
 		return inputHandler;
 	}
+
+	/**
+	 * @return the position of the spawn
+	 */
 	public Vec2i getSpawn() {
 		return spawn;
 	}
+
+	/**
+	 * @return the position of the castle
+	 */
 	public Vec2i getCastle() {
 		return castle;
 	}
+
+	/**
+	 * Add coins to the balance
+	 * @param coins  coins to add
+	 */
 	public void addCoins(int coins) {
 		this.coins += coins;
 	}

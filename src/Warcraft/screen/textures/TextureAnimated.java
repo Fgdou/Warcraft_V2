@@ -6,6 +6,10 @@ import Warcraft.tools.Vec2;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * This texture use other textures to animate itself
+ */
+
 public class TextureAnimated extends Texture {
 
     private final List<Texture> textures;
@@ -13,13 +17,22 @@ public class TextureAnimated extends Texture {
     private int iterationTexture;
     private final int timeChange;
 
+    /**
+     * @param textures      A list of texture to be changed in the time
+     * @param timeChange    The cooldown time for changing the texture in ticks
+     */
     TextureAnimated(List<Texture> textures, int timeChange){
         this.textures = textures;
         this.timeChange = timeChange;
         this.iterationTexture = 0;
         cnt = 0;
     }
-    public TextureAnimated(Texture textures[], int timeChange){
+
+    /**
+     * @param textures      A list of texture to be changed in the time
+     * @param timeChange    The cooldown time for changing the texture in ticks
+     */
+    public TextureAnimated(Texture[] textures, int timeChange){
         this.textures = Arrays.asList(textures);
         this.timeChange = timeChange;
         this.iterationTexture = 0;

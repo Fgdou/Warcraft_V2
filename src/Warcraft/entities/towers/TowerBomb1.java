@@ -42,7 +42,7 @@ public class TowerBomb1 extends TowerBomb {
         if((e instanceof Monster && !((Monster)e).getFly()) && getAttack().inRange(e) && getAttack().isReady()){
             Projectile p = new ProjectileBomb(this, e, getAttack().getSpeed(), getAttack().getDamage());
             level.addEntity(p);
-            getAttack().reset();
+            getAttack().resetCoolDown();
         }
     }
 }

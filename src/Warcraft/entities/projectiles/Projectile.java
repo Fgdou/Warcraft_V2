@@ -9,12 +9,22 @@ import Warcraft.level.Level;
 import Warcraft.tools.Vec2;
 
 public abstract class Projectile extends Entity {
+    public static final double RANGE = .5;
+
     private Entity target;
     private Entity from;
     private Vec2 dir;
     private double scale;
     private int damage;
 
+    /**
+     * @param from      The entity which send the projectile
+     * @param target    The entity targeted
+     * @param texture   The texture of the projectile
+     * @param speed     The speed in tile per tick
+     * @param scale     The scale where 1 is the full tile
+     * @param damage    The damage to hurt the target
+     */
     public Projectile(Entity from, Entity target, Texture texture, double speed, double scale, int damage) {
         super(from.getPos(), texture);
         this.from = from;
@@ -27,7 +37,9 @@ public abstract class Projectile extends Entity {
     @Override
     public void onTick(Level level){
         addPos(dir);
-        if(getPos().distance(target.getPos()) < .5) {
+
+        //Hurt if the distance is small
+        if(getPos().distance(target.getPos()) < RANGE) {
             die();
             if(target instanceof Tower)
                 ((Tower)target).hurt(damage);

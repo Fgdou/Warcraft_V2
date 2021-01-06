@@ -8,8 +8,14 @@ import Warcraft.tools.InputHandler;
 import Warcraft.tools.Vec2;
 import Warcraft.tools.Vec2i;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.FileNotFoundException;
+
+/**
+ * This class is the main class
+ * It handle the interface between the player and the game (screen, level, tick, draw)
+ */
 
 public class Game {
 
@@ -21,6 +27,9 @@ public class Game {
 
 	private boolean running;
 
+	/**
+	 * Create the game
+	 */
 	public Game() {
 		screen = new Screen(new Vec2i(1000, 800), 10);
 		inputHandler = new InputHandler(screen);
@@ -28,14 +37,24 @@ public class Game {
 		running = true;
 	}
 
-	public void tick(){
+	/**
+	 * Logic of the game
+	 */
+	private void tick(){
 		inputHandler.tick();
 		level.tick();
 	}
-	public void draw(){
+
+	/**
+	 * Drawing of the game
+	 */
+	private void draw(){
 		level.draw();
 	}
 
+	/**
+	 * Launch the game, but wait for pressing S
+	 */
 	public void run(){
 		long time = System.nanoTime();
 		long lastTime = time;
@@ -46,20 +65,25 @@ public class Game {
 		int lastCountFps = 0;
 		int lastCountTps = 0;
 
+		//Time for 1 frame
 		final int delta = 1000000000 / TICK_RATE;
 
 		while(running){
 			time = System.nanoTime();
 
+			//Do necessary ticks to keep up with the time
 			while(time - lastTime > delta){
 				lastTime += delta;
 				countTps++;
 				tick();
 			}
+
+			//Then potentially the drawing, because drawing is very slow in StdDraw
 			countFps++;
 			screen.clear();
 			draw();
 
+			//Show the tps and fps
 			if(time - lastTimeRate > 1000000000){
 				lastTimeRate += 1000000000;
 
@@ -69,7 +93,6 @@ public class Game {
 				countFps = 0;
 				countTps = 0;
 			}
-
 			screen.drawTextLeftAbsolute(new Vec2(0, 0.98), 20, Color.black, "Tps: " + lastCountTps);
 			screen.drawTextLeftAbsolute(new Vec2(0, 0.95), 20, Color.black, "Fps: " + lastCountFps);
 
@@ -81,6 +104,14 @@ public class Game {
 	}
 
 	public static void main(String[] args) throws FileNotFoundException {
+		String msg = "";
+		msg += "S 		: start\n";
+		msg += "[space] : speed up the game by x5\n";
+		msg += "\n";
+		msg += "A 		: archer\n";
+		msg += "B 		: bomber\n";
+		msg += "E 		: upgrade\n";
+		JOptionPane.showMessageDialog(null, msg);
 		Game g = new Game();
 		g.run();
 	}
