@@ -4,7 +4,6 @@ import Warcraft.entities.Attack;
 import Warcraft.entities.Entity;
 import Warcraft.entities.projectiles.Projectile;
 import Warcraft.entities.projectiles.ProjectileLlama;
-import Warcraft.screen.textures.Texture;
 import Warcraft.screen.textures.TextureImage;
 
 public class Llama extends Monster {

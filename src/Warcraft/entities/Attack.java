@@ -4,10 +4,10 @@ package Warcraft.entities;
  * This class is used to set infos on monsters or towers. It gives the details of an attack.
  */
 public class Attack {
-    private int damage;
-    private double speed;
-    private double range;
-    private Entity parent;
+    private final int damage;
+    private final double speed;
+    private final double range;
+    private final Entity parent;
 
     private final int coolDownTime;
     private int coolDownActual;

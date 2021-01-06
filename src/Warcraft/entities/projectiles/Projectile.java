@@ -11,11 +11,10 @@ import Warcraft.tools.Vec2;
 public abstract class Projectile extends Entity {
     public static final double RANGE = .5;
 
-    private Entity target;
-    private Entity from;
-    private Vec2 dir;
-    private double scale;
-    private int damage;
+    private final Entity target;
+    private final Vec2 dir;
+    private final double scale;
+    private final int damage;
 
     /**
      * @param from      The entity which send the projectile
@@ -27,7 +26,6 @@ public abstract class Projectile extends Entity {
      */
     public Projectile(Entity from, Entity target, Texture texture, double speed, double scale, int damage) {
         super(from.getPos(), texture);
-        this.from = from;
         this.target = target;
         dir = target.getPos().sub(from.getPos()).normalize().mul(speed);
         this.scale = scale;
@@ -57,5 +55,5 @@ public abstract class Projectile extends Entity {
     }
 
     @Override
-    public void onInteract(Entity e, Level l){};
+    public void onInteract(Entity e, Level l){}
 }

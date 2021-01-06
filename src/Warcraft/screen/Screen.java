@@ -12,8 +12,8 @@ import java.awt.*;
  */
 
 public class Screen {
-	private Vec2i size;
-	private int nTileX;
+	private final Vec2i size;
+	private final int nTileX;
 
 	/**
 	 * @param size 		int pixel

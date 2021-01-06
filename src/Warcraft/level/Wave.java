@@ -11,9 +11,9 @@ import java.util.Scanner;
  */
 
 public class Wave {
-    private List<List<String>> monstersPerWave;
-    private List<Integer> cooldowns;
-    private List<Integer> nbMonsters;
+    private final List<List<String>> monstersPerWave;
+    private final List<Integer> cooldowns;
+    private final List<Integer> nbMonsters;
 
     private final int COOLDOWN = 10*60;
 
@@ -61,9 +61,7 @@ public class Wave {
                 String[] tab = line.split(" ");
                 nbMonsters.add(Integer.parseInt(tab[1]));
                 cooldowns.add(Integer.parseInt(tab[2]));
-            }else if(line.equals(""))
-                continue;
-            else{
+            }else{
                 current.add(line);
             }
         }

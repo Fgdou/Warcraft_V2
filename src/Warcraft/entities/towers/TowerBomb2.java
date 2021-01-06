@@ -1,7 +1,6 @@
 package Warcraft.entities.towers;
 
 import Warcraft.entities.Attack;
-import Warcraft.screen.textures.Texture;
 import Warcraft.screen.textures.TextureImage;
 import Warcraft.tools.Vec2;
 

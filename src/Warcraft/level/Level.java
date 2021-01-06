@@ -32,18 +32,18 @@ public class Level {
 		UpgradeTower
 	}
 
-	private PathRandom path;
-	private Wave waves;
-	private Screen screen;
-	private InputHandler inputHandler;
+	private final PathRandom path;
+	private final Wave waves;
+	private final Screen screen;
+	private final InputHandler inputHandler;
 
-	private Tiles[][] tiles;
+	private final Tiles[][] tiles;
 	private Vec2i spawn;
 	private Vec2i castle;
 
-	private List<Monster> monsters;
-	private List<Tower> towers;
-	private List<Projectile> projectiles;
+	private final List<Monster> monsters;
+	private final List<Tower> towers;
+	private final List<Projectile> projectiles;
 
 	private boolean tickEnable;
 	private int gameSpeed;
@@ -389,9 +389,9 @@ public class Level {
 			screen.drawTextImageRight(stateNewTower.getPos().add(new Vec2(.7, .5)), 20, Color.BLACK, String.valueOf(stateNewTower.getCost()), "assets/images/coin.png");
 		}
 		for(Tower t : towers){
-			Color c = Color.GRAY;
 
 			if(selectedState == State.UpgradeTower && t.isUpgradable()){
+				Color c;
 				if(t.costUpgrade() > coins)
 					c = Color.RED;
 				else if(t.getPos().equals(new Vec2(inputHandler.getMouseTile()))){

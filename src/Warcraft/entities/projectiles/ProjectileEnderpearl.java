@@ -1,8 +1,6 @@
 package Warcraft.entities.projectiles;
 
 import Warcraft.entities.Entity;
-import Warcraft.level.Level;
-import Warcraft.screen.textures.Texture;
 import Warcraft.screen.textures.TextureImage;
 
 public class ProjectileEnderpearl extends Projectile {

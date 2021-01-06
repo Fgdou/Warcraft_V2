@@ -13,13 +13,13 @@ import java.awt.*;
 public abstract class Monster extends Entity {
     private int pv;
     private final int maxPv;
-    private double speed;
+    private final double speed;
     private Vec2 lastPos;
     private double timeStart;
-    private double scale;
-    private boolean fly;
+    private final double scale;
+    private final boolean fly;
     private Attack attack;
-    private int coinsKilled;
+    private final int coinsKilled;
 
     /**
      * @return the attack of the monster
@@ -50,7 +50,7 @@ public abstract class Monster extends Entity {
 
     /**
      * Set the attack of the monster. Has to be called in the constructor
-     * @param attack
+     * @param attack The attack
      */
     public void setAttack(Attack attack){
         this.attack = attack;

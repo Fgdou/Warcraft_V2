@@ -15,7 +15,7 @@ public abstract class Tower extends Entity {
     private int pv;
     private final int maxPv;
     private Attack attack;
-    private boolean flyProjectile;
+    private final boolean flyProjectile;
 
     private int cntTps;
 
@@ -42,7 +42,7 @@ public abstract class Tower extends Entity {
     }
     /**
      * Set the attack of the tower. Has to be called in the constructor
-     * @param attack
+     * @param attack The attack
      */
     public void setAttack(Attack attack){
         this.attack = attack;
@@ -123,7 +123,7 @@ public abstract class Tower extends Entity {
 
     /**
      * Decrease the life of the tower
-     * @param damage
+     * @param damage The damage
      */
     public void hurt(int damage){
         pv -= damage;

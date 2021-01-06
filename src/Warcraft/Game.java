@@ -10,7 +10,6 @@ import Warcraft.tools.Vec2i;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.FileNotFoundException;
 
 /**
  * This class is the main class
@@ -19,11 +18,11 @@ import java.io.FileNotFoundException;
 
 public class Game {
 
-	private Screen screen;
-	private Level level;
-	private int TICK_RATE = 60;
+	private final Screen screen;
+	private final Level level;
+	private final int TICK_RATE = 60;
 
-	private InputHandler inputHandler;
+	private final InputHandler inputHandler;
 
 	private boolean running;
 
@@ -103,7 +102,7 @@ public class Game {
 		}
 	}
 
-	public static void main(String[] args) throws FileNotFoundException {
+	public static void main(String[] args) {
 		String msg = "";
 		msg += "S 		: start\n";
 		msg += "[space] : speed up the game by x5\n";

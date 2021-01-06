@@ -6,7 +6,6 @@ import Warcraft.tools.Vec2i;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Stack;
 
 
 /**
@@ -14,8 +13,8 @@ import java.util.Stack;
  * The data are a list of vectors between each points
  */
 public class PathRandom {
-    private List<Vec2i> path;
-    private Vec2i start;
+    private final List<Vec2i> path;
+    private final Vec2i start;
 
     /**
      * @param size      the size x and y
@@ -41,7 +40,7 @@ public class PathRandom {
 
                 System.out.print(s);
             }
-            System.out.println("");
+            System.out.println();
         }
     }
 

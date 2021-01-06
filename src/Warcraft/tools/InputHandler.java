@@ -12,9 +12,9 @@ import java.util.TreeSet;
  */
 
 public class InputHandler {
-    private Set<Character> keyboard; // handle many press
-    private Vec2 mouse;
-    private Screen screen;
+    private final Set<Character> keyboard; // handle many press
+    private final Vec2 mouse;
+    private final Screen screen;
 
     private boolean mousePressed;
     private boolean mouseClicked;

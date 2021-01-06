@@ -12,7 +12,7 @@ import Warcraft.tools.Vec2;
 public abstract class Entity {
     private boolean alive;
     private Vec2 pos;
-    private Texture texture;
+    private final Texture texture;
 
     /**
      * @param pos       The starting point
@@ -26,7 +26,7 @@ public abstract class Entity {
 
     /**
      * Set the position of the entity
-     * @param pos
+     * @param pos The position
      */
     public void setPos(Vec2 pos){
         this.pos = pos;
