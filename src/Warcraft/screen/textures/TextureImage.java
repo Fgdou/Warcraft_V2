@@ -15,4 +15,11 @@ public class TextureImage extends Texture {
     public void draw(Screen screen, Vec2 pos, double scale, double angle) {
         screen.drawImage(pos, new Vec2(scale, scale), filename, angle);
     }
+
+    /**
+     * @return the path of the image
+     */
+    public String getFilename(){
+        return filename;
+    }
 }

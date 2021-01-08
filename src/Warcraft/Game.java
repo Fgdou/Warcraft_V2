@@ -7,6 +7,7 @@ import Warcraft.level.Wave;
 import Warcraft.tools.InputHandler;
 import Warcraft.tools.Vec2;
 import Warcraft.tools.Vec2i;
+import Warcraft.ui.Ui;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,6 +21,8 @@ public class Game {
 
 	private final Screen screen;
 	private final Level level;
+	private final Ui ui;
+
 	private final int TICK_RATE = 60;
 
 	private final InputHandler inputHandler;
@@ -34,6 +37,7 @@ public class Game {
 		inputHandler = new InputHandler(screen);
 		level = new Level(screen, inputHandler, new PathRandom(screen.getnTiles(), new Vec2i(1,1)), new Wave("assets/levels/level1.txt"));
 		running = true;
+		ui = new Ui(level, screen);
 	}
 
 	/**
@@ -41,6 +45,7 @@ public class Game {
 	 */
 	private void tick(){
 		inputHandler.tick();
+		ui.update();
 		level.tick();
 	}
 
@@ -49,6 +54,7 @@ public class Game {
 	 */
 	private void draw(){
 		level.draw();
+		ui.draw();
 	}
 
 	/**
@@ -103,14 +109,6 @@ public class Game {
 	}
 
 	public static void main(String[] args) {
-		String msg = "";
-		msg += "S 		: start\n";
-		msg += "[space] : speed up the game by x5\n";
-		msg += "\n";
-		msg += "A 		: archer\n";
-		msg += "B 		: bomber\n";
-		msg += "E 		: upgrade\n";
-		JOptionPane.showMessageDialog(null, msg);
 		Game g = new Game();
 		g.run();
 	}

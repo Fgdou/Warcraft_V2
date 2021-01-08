@@ -3,7 +3,6 @@ package Warcraft.level;
 import Warcraft.tools.InputHandler;
 import Warcraft.entities.Entity;
 import Warcraft.entities.monsters.Monster;
-import Warcraft.entities.projectiles.Projectile;
 import Warcraft.entities.towers.Tower;
 import Warcraft.entities.towers.TowerArcher1;
 import Warcraft.entities.towers.TowerBomb1;
@@ -13,9 +12,7 @@ import Warcraft.tools.Vec2;
 import Warcraft.tools.Vec2i;
 
 import java.awt.*;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
 
 public class Level {
@@ -43,7 +40,7 @@ public class Level {
 
 	private final List<Monster> monsters;
 	private final List<Tower> towers;
-	private final List<Projectile> projectiles;
+	private final List<Entity> entities;
 
 	private boolean tickEnable;
 	private int gameSpeed;
@@ -68,9 +65,9 @@ public class Level {
 		this.inputHandler = inputHandler;
 
 		tiles = new Tiles[screen.getnTiles().y][screen.getnTiles().x];
-		monsters = new LinkedList<>();
-		towers = new LinkedList<>();
-		projectiles = new LinkedList<>();
+		monsters = new ArrayList<>();
+		towers = new ArrayList<>();
+		entities = new ArrayList<>();
 
 		tickEnable = false;
 		ended = false;
@@ -81,6 +78,28 @@ public class Level {
 		coins = 100;
 
 		fillTilesWithPath();
+	}
+
+	/**
+	 * Set the state to add or upgrade a tower
+	 * @param state 	the state
+	 */
+	public void setState(State state){
+		this.selectedState = state;
+	}
+	public State getState(){
+		return selectedState;
+	}
+
+	/**
+	 * Set the tower to add to the mouse
+	 * @param tower
+	 */
+	public void setNewTower(Tower tower){
+		this.stateNewTower = tower;
+	}
+	public Tower getNewTower(){
+		return stateNewTower;
 	}
 
 	/**
@@ -144,6 +163,10 @@ public class Level {
 		tickEnable = false;
 	}
 
+	public void togglePause(){
+		tickEnable = !tickEnable;
+	}
+
 	/**
 	 * Set the speed of the game. 1 is 60 ticks per sec
 	 * @param factor  1 default and more
@@ -203,7 +226,6 @@ public class Level {
 			if(selectedState == State.NewTower && coins >= stateNewTower.getCost() && isTileFree(mouse)) {
 				//Place the tower
 				addEntity(stateNewTower);
-				stateNewTower = stateNewTower.copy();
 				coins -= stateNewTower.getCost();
 				tiles[mouse.y][mouse.x] = Tiles.TOWER;
 			}else if(selectedState == State.UpgradeTower){
@@ -221,6 +243,8 @@ public class Level {
 					towers.remove(founded);
 				}
 			}
+
+			selectedState = State.Normal;
 		}
 	}
 
@@ -240,13 +264,10 @@ public class Level {
 		}else if(c == 'b'){
 			selectedState = State.NewTower;
 			stateNewTower = new TowerBomb1(new Vec2(inputHandler.getMouseTile()));
-		}else if(c == ' '){
-			gameSpeed += 5;
 		}else if(c == 's'){
 			start();
 		}else{
 			selectedState = State.Normal;
-			setSpeed(1);
 		}
 
 		if(c == 'q')
@@ -278,10 +299,10 @@ public class Level {
 				im.remove();
 		}
 
-		//Projectiles
-		Iterator<Projectile> ip = projectiles.iterator();
+		//Entities
+		Iterator<Entity> ip = entities.iterator();
 		while(ip.hasNext()){
-			Projectile t = ip.next();
+			Entity t = ip.next();
 			t.onTick(this);
 			if(!t.isAlive())
 				ip.remove();
@@ -326,7 +347,7 @@ public class Level {
 			t.onDraw(screen);
 		for(Monster m : monsters)
 			m.onDraw(screen);
-		for(Projectile p : projectiles)
+		for(Entity p : entities)
 			p.onDraw(screen);
 
 		drawState();
@@ -344,10 +365,8 @@ public class Level {
 			monsters.add((Monster)e);
 		else if(e instanceof Tower)
 			towers.add((Tower)e);
-		else if(e instanceof Projectile)
-			projectiles.add((Projectile)e);
 		else
-			throw new RuntimeException("e not found");
+			entities.add(e);
 	}
 
 	/**
@@ -378,6 +397,8 @@ public class Level {
 	 * Draw the mouse when adding or upgrading tower
 	 */
 	private void drawState(){
+		if(!tickEnable)
+			return;
 		if(selectedState == State.NewTower && stateNewTower != null){
 			stateNewTower.onDraw(screen);
 			Color c = Color.GREEN;
@@ -413,8 +434,9 @@ public class Level {
 	 * Draw life and coins
 	 */
 	private void drawInfos(){
-		screen.drawTextImageRightAbsolute(new Vec2(1, 0.96), 30, Color.BLACK, String.valueOf(coins), "assets/images/coin.png");
-		screen.drawTextImageRightAbsolute(new Vec2(1, 0.92), 30, Color.BLACK, String.valueOf(lives), "assets/images/heart.png");
+		screen.drawFilledRectangleAbsolute(new Vec2(.9, .06), new Vec2(.1, .06), new Color(0x77000000, true));
+		screen.drawTextImageRightAbsolute(new Vec2(1, 0.04), 30, Color.white, String.valueOf(coins), "assets/images/coin.png");
+		screen.drawTextImageRightAbsolute(new Vec2(1, 0.08), 30, Color.white, String.valueOf(lives), "assets/images/heart.png");
 	}
 
 	/**

@@ -165,6 +165,8 @@ public class Screen {
 	 * @param angle		The angle in deg
 	 */
 	public void drawImageAbsolute(Vec2 pos, Vec2 size, String file, double angle){
+		if(file == null)
+			return;
 		StdDraw.picture(pos.x, pos.y, file, size.x, size.y, angle);
 	}
 	/**
@@ -192,6 +194,31 @@ public class Screen {
 
 		StdDraw.setPenColor(c);
 		StdDraw.ellipse(pos.x, pos.y, size.x, size.y);
+	}
+	/**
+	 * Draw a circle on the screen
+	 * @param pos		A world coord
+	 * @param radius	A world radius
+	 * @param c			A color
+	 */
+	public void drawCircleAbsolute(Vec2 pos, double radius, Color c){
+		Vec2 size = new Vec2(radius, radius);
+
+		StdDraw.setPenColor(c);
+		StdDraw.ellipse(pos.x, pos.y, size.x, size.y);
+	}
+
+	/**
+	 * Draw a circle on the screen
+	 * @param pos		A StdDraw coord
+	 * @param radius	A world radius
+	 * @param c			A color
+	 */
+	public void drawFilledCircleAbsolute(Vec2 pos, double radius, Color c){
+		Vec2 size = new Vec2(radius, radius);
+
+		StdDraw.setPenColor(c);
+		StdDraw.filledEllipse(pos.x, pos.y, size.x, size.y);
 	}
 
 	/**
@@ -263,6 +290,9 @@ public class Screen {
 	 * @param msg		The text to show
 	 */
 	public void drawTextLeftAbsolute(Vec2 pos, int fontSize, Color c, String msg){
+		if(msg == null)
+			return;
+
 		StdDraw.setFont(new Font("Roboto", Font.PLAIN, fontSize));
 		StdDraw.setPenColor(c);
 		StdDraw.textLeft(pos.x, pos.y, msg);
@@ -298,7 +328,6 @@ public class Screen {
 	 */
 	public void drawTextRight(Vec2 pos, int fontSize, Color c, String msg){
 		drawTextRightAbsolute(worldPosToScreen(pos), fontSize, c, msg);
-
 	}
 
 	/**

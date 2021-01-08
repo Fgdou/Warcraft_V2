@@ -2,6 +2,7 @@ package Warcraft.entities.monsters;
 
 import Warcraft.entities.Attack;
 import Warcraft.entities.Entity;
+import Warcraft.entities.animations.AnimationText;
 import Warcraft.entities.projectiles.Projectile;
 import Warcraft.screen.Screen;
 import Warcraft.screen.textures.Texture;
@@ -60,6 +61,12 @@ public abstract class Monster extends Entity {
     public void onTick(Level level) {
         if(attack != null)
             attack.cool();
+
+        if(pv <= 0){
+            die();
+            level.addCoins(getCoinsKilled());
+            level.addEntity(new AnimationText(getPos(), String.valueOf(getCoinsKilled()), "/assets/images/coin.png"));
+        }
 
         timeStart += speed;
 

@@ -40,9 +40,10 @@ public class InputHandler {
         if(StdDraw.isMousePressed()){
             if(!mousePressed){
                 mousePressed = true;
-                mouseClicked = true;
             }
         }else{
+            if(mousePressed)
+                mouseClicked = true;
             mousePressed = false;
         }
 
