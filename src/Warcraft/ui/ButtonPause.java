@@ -8,7 +8,7 @@ public class ButtonPause extends ButtonCircle {
      * @param pos   the position
      */
     public ButtonPause(Vec2 pos) {
-        super(pos, .04, null, null);
+        super(pos, .04, "assets/images/pause.png", null);
     }
 
     @Override

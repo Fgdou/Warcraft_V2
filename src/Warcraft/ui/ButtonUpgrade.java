@@ -10,7 +10,7 @@ public class ButtonUpgrade extends ButtonCircle {
      * @param pos   the position
      */
     public ButtonUpgrade(Vec2 pos) {
-        super(pos, .04, null, "e");
+        super(pos, .04, "assets/images/upgrade.png", "e");
     }
 
     @Override

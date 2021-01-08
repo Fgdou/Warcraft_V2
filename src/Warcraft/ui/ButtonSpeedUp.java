@@ -8,7 +8,7 @@ public class ButtonSpeedUp extends ButtonCircle {
      * @param pos   the position
      */
     public ButtonSpeedUp(Vec2 pos) {
-        super(pos, .02, null, null);
+        super(pos, .02, "/assets/images/skip.png", null);
     }
 
     @Override

@@ -9,12 +9,12 @@ import Warcraft.tools.Vec2i;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Ui {
+public class UiGame {
     private Level level;
     private Screen screen;
     private List<UiElement> elements;
 
-    public Ui(Level level, Screen screen){
+    public UiGame(Level level, Screen screen){
         this.level = level;
         this.screen = screen;
         this.elements = new ArrayList<>();

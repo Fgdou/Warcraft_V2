@@ -38,7 +38,7 @@ public abstract class ButtonCircle extends UiElement {
 
 
         screen.drawCircleAbsolute(getPos(), getSize()*scale, new Color(0xD35400));
-        screen.drawImageAbsolute(getPos(), new Vec2(getSize()*.8*2*scale, getSize()*.8*2*scale), image, 0);
+        screen.drawImageAbsolute(getPos(), new Vec2(getSize()*.6*2*scale, getSize()*.6*2*scale), image, 0);
         screen.drawTextLeftAbsolute(getPos().add(new Vec2(-getSize(), getSize())), 20, Color.black, c);
     }
 }

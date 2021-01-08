@@ -7,9 +7,8 @@ import Warcraft.level.Wave;
 import Warcraft.tools.InputHandler;
 import Warcraft.tools.Vec2;
 import Warcraft.tools.Vec2i;
-import Warcraft.ui.Ui;
+import Warcraft.ui.UiGame;
 
-import javax.swing.*;
 import java.awt.*;
 
 /**
@@ -21,7 +20,7 @@ public class Game {
 
 	private final Screen screen;
 	private final Level level;
-	private final Ui ui;
+	private final UiGame uiGame;
 
 	private final int TICK_RATE = 60;
 
@@ -37,7 +36,7 @@ public class Game {
 		inputHandler = new InputHandler(screen);
 		level = new Level(screen, inputHandler, new PathRandom(screen.getnTiles(), new Vec2i(1,1)), new Wave("assets/levels/level1.txt"));
 		running = true;
-		ui = new Ui(level, screen);
+		uiGame = new UiGame(level, screen);
 	}
 
 	/**
@@ -45,7 +44,7 @@ public class Game {
 	 */
 	private void tick(){
 		inputHandler.tick();
-		ui.update();
+		uiGame.update();
 		level.tick();
 	}
 
@@ -54,7 +53,7 @@ public class Game {
 	 */
 	private void draw(){
 		level.draw();
-		ui.draw();
+		uiGame.draw();
 	}
 
 	/**
