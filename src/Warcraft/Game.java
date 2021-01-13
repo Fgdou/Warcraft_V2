@@ -32,7 +32,7 @@ public class Game {
 	 * Create the game
 	 */
 	public Game() {
-		screen = new Screen(new Vec2i(1000, 800), 100);
+		screen = new Screen(new Vec2i(1000, 800), 10);
 		inputHandler = new InputHandler(screen);
 		
 		PathRandom path = new PathRandom(screen.getnTiles(), new Vec2i(1,1), screen);

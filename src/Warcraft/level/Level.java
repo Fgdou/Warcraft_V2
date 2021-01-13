@@ -373,11 +373,13 @@ public class Level {
 	 * Draw grass spawn and castle, with the progress bar of the wave
 	 */
 	private void drawBackground(){
-		for(int i=0; i<screen.getnTiles().y; i++){
+		for(int i=0; i<screen.getnTiles().y+1; i++){
 			for(int j=0; j<screen.getnTiles().x; j++){
 				Texture t;
 
-				Tiles tile = tiles[i][j];
+				Tiles tile = Tiles.EMPTY;
+				if(i < tiles.length)
+					tile = tiles[i][j];
 
 				if(tile == Tiles.PATH)
 					t = Texture.PATH;

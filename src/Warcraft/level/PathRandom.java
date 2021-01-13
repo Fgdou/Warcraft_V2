@@ -29,6 +29,8 @@ public class PathRandom {
         this.screen = screen;
         cntDraw = 0;
         path = generate(size, start);
+        
+        drawPath();
     }
 
     /**
@@ -127,13 +129,17 @@ public class PathRandom {
      */
     private List<Vec2i> goBack(int[][] tiles, Vec2i max){
         LinkedList<Vec2i> list = new LinkedList<>();
-
+        
         Vec2i current = max;
+        
+        list.push(new Vec2i());
+    
         for(int i=tiles[max.y][max.x]; i>1; i--){
             Vec2i newCurrent = findNext(tiles, current);
             list.push(newCurrent.sub(current));
             current = newCurrent;
         }
+        
         return list;
     }
 
@@ -176,7 +182,7 @@ public class PathRandom {
             return;
 
         tiles[current.y][current.x] = n;
-        drawMaze(tiles);
+        //drawMaze(tiles);
 
         //Search in all dir randomly
         for(int i=0; i<4; i++){
@@ -209,7 +215,7 @@ public class PathRandom {
     }
     
     /**
-     * Draw the animation at the creation of the path
+     * Draw the animation at the creation of the maze used for the path
      * @param tiles
      */
     private void drawMaze(int[][] tiles){
@@ -260,7 +266,29 @@ public class PathRandom {
         screen.render();
     }
     
+    /**
+     * Draw the animation only for the path
+     */
     private void drawPath(){
-        //TODO
+        screen.clear();
+        
+        for(int i=0; i<screen.getnTiles().y+1; i++){
+            for(int j=0; j<screen.getnTiles().x; j++){
+                Texture.BACKGROUND.draw(screen, new Vec2(j, i), 1, 0);
+            }
+        }
+        
+        int wait = 1000 / length();
+        
+        for(int i=0; i<length(); i++){
+            Texture.PATH.draw(screen, get(i), 1, 0);
+            screen.render();
+    
+            try {
+                Thread.sleep(wait);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
