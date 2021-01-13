@@ -32,9 +32,13 @@ public class Game {
 	 * Create the game
 	 */
 	public Game() {
-		screen = new Screen(new Vec2i(1000, 800), 10);
+		screen = new Screen(new Vec2i(1000, 800), 100);
 		inputHandler = new InputHandler(screen);
-		level = new Level(screen, inputHandler, new PathRandom(screen.getnTiles(), new Vec2i(1,1)), new Wave("assets/levels/level1.txt"));
+		
+		PathRandom path = new PathRandom(screen.getnTiles(), new Vec2i(1,1), screen);
+		Wave wave = new Wave("assets/levels/level1.txt");
+		level = new Level(screen, inputHandler, path, wave);
+		
 		running = true;
 		uiGame = new UiGame(level, screen);
 	}

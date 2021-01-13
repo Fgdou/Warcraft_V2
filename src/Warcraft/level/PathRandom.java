@@ -1,5 +1,7 @@
 package Warcraft.level;
 
+import Warcraft.screen.Screen;
+import Warcraft.screen.textures.Texture;
 import Warcraft.tools.Vec2;
 import Warcraft.tools.Vec2i;
 
@@ -15,21 +17,25 @@ import java.util.List;
 public class PathRandom {
     private final List<Vec2i> path;
     private final Vec2i start;
+    private final Screen screen;
+    private int cntDraw;
 
     /**
      * @param size      the size x and y
      * @param start     the start position
      */
-    public PathRandom(Vec2i size, Vec2i start){
-        path = generate(size, start);
+    public PathRandom(Vec2i size, Vec2i start, Screen screen){
         this.start = start;
+        this.screen = screen;
+        cntDraw = 0;
+        path = generate(size, start);
     }
 
     /**
      * Show a 2D array on the console
      * @param tiles     the 2D array
      */
-    private static void print(int[][] tiles){
+    private void print(int[][] tiles){
         for(int i=tiles.length-1; i>=0; i--){
             for(int j=0; j<tiles[i].length; j++){
                 String s = String.valueOf(tiles[i][j]);
@@ -77,11 +83,13 @@ public class PathRandom {
      * @param start     the starting point
      * @return          the vectors of the path
      */
-    private static List<Vec2i> generate(Vec2i size, Vec2i start){
+    private List<Vec2i> generate(Vec2i size, Vec2i start){
         int[][] tiles = new int[size.y/2][size.x/2];
 
         //Generate maze
         generate_int(tiles, start.div(2), 1);
+    
+        print(tiles);
 
         //Find longest path
         Vec2i max = getMax(tiles);
@@ -100,7 +108,7 @@ public class PathRandom {
      * @param tab the 2D array
      * @return    the position of the max
      */
-    private static Vec2i getMax(int[][] tab){
+    private Vec2i getMax(int[][] tab){
         Vec2i max = null;
         for(int i=0; i<tab.length; i++){
             for(int j=0; j<tab[0].length; j++){
@@ -117,7 +125,7 @@ public class PathRandom {
      * @param max       The starting point
      * @return          The list of vector from the max to the end of the path
      */
-    private static List<Vec2i> goBack(int[][] tiles, Vec2i max){
+    private List<Vec2i> goBack(int[][] tiles, Vec2i max){
         LinkedList<Vec2i> list = new LinkedList<>();
 
         Vec2i current = max;
@@ -135,7 +143,7 @@ public class PathRandom {
      * @param current       The current pos
      * @return              The finded pos
      */
-    private static Vec2i findNext(int[][] tiles, Vec2i current) {
+    private Vec2i findNext(int[][] tiles, Vec2i current) {
         for(int i=-1; i<=1; i++){
             for(int j=-1; j<=1; j++) {
                 if (i == 0 && j == 0)
@@ -160,7 +168,7 @@ public class PathRandom {
      * @param current   The current position
      * @param n         The level of depth in the recursion
      */
-    private static void generate_int(int[][] tiles, Vec2i current, int n){
+    private void generate_int(int[][] tiles, Vec2i current, int n){
         int dir = (int)(Math.random()*4)%4;
 
         //Stop condition
@@ -168,6 +176,7 @@ public class PathRandom {
             return;
 
         tiles[current.y][current.x] = n;
+        drawMaze(tiles);
 
         //Search in all dir randomly
         for(int i=0; i<4; i++){
@@ -192,10 +201,66 @@ public class PathRandom {
      * @param pos   The current position
      * @return      If the tile is available for a path
      */
-    private static boolean isFree(int[][] tiles, Vec2i pos){
+    private boolean isFree(int[][] tiles, Vec2i pos){
         if(pos.x < 0 || pos.y < 0 || pos.x >= tiles[0].length || pos.y >= tiles.length)
             return false;
 
         return (tiles[pos.y][pos.x] == 0);
+    }
+    
+    /**
+     * Draw the animation at the creation of the path
+     * @param tiles
+     */
+    private void drawMaze(int[][] tiles){
+        
+        if(tiles.length > 10 && cntDraw != tiles.length*10){
+            cntDraw++;
+            return;
+        }
+        cntDraw = 0;
+        
+        screen.clear();
+        for(int i=-1; i<tiles.length*2; i++){
+            for(int j=-1; j<tiles[0].length*2; j++){
+                Texture t = Texture.BACKGROUND;
+                Vec2i p = new Vec2i(j, i);
+                
+                
+                if(!(i == -1 || j == -1)) {
+                    if (i % 2 == 0 && j % 2 == 0 && tiles[i / 2][j / 2] != 0)
+                        t = Texture.PATH;
+                    else if (j % 2 == 1 && i % 2 == 0) {
+                        //Check up down
+                        if (j / 2 < tiles[0].length - 1) {
+                            int a = tiles[i / 2][j / 2];
+                            if (a != 0) {
+                                int b = tiles[i / 2][j / 2 + 1];
+                                if (Math.abs(a - b) == 1)
+                                    t = Texture.PATH;
+                            }
+                        }
+                    } else if (i % 2 == 1 && j % 2 == 0) {
+                        //Check left right
+                        if (i / 2 < tiles.length - 1) {
+                            int a = tiles[i / 2][j / 2];
+                            if (a != 0) {
+                                int b = tiles[i / 2 + 1][j / 2];
+                                if (Math.abs(a - b) == 1)
+                                    t = Texture.PATH;
+                            }
+                        }
+        
+                    }
+                }
+                
+                t.draw(screen, new Vec2(p.add(1)), 1, 0);
+            }
+        }
+        screen.render();
+    }
+    
+    private void drawPath(){
+        //TODO
     }
 }
