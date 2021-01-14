@@ -76,6 +76,8 @@ public class Game {
 		//Time for 1 frame
 		final int delta = 1000000000 / TICK_RATE;
 
+		showMessage("Press S to Start");
+
 		while(running){
 			time = System.nanoTime();
 
@@ -108,6 +110,33 @@ public class Game {
 
 			if(level.ended())
 				running = false;
+		}
+		showMessage("Wasted...");
+	}
+
+	/**
+	 * Show a message on the middle of the screen
+	 * @param msg
+	 */
+	private void showMessage(String msg) {
+
+		for(int i=0; i<20; i++){
+			screen.fill(new Color(0, 0, 0, 10));
+			screen.render();
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+
+		screen.drawTextCenterAbsolute(new Vec2(.5, .5), 40, Color.white, msg);
+		screen.render();
+
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 	}
 

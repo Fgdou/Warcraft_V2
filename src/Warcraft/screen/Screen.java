@@ -113,6 +113,14 @@ public class Screen {
 	}
 
 	/**
+	 * Fill the screen with a color
+	 * @param c	The color
+	 */
+	public void fill(Color c){
+		drawFilledRectangleAbsolute(new Vec2(.5, .5), new Vec2(.5, .5), c);
+	}
+
+	/**
 	 * Draw a rectangle on the screen
 	 * @param pos			A world coord
 	 * @param halfSize		A world size
@@ -296,6 +304,21 @@ public class Screen {
 		StdDraw.setFont(new Font("Roboto", Font.PLAIN, fontSize));
 		StdDraw.setPenColor(c);
 		StdDraw.textLeft(pos.x, pos.y, msg);
+	}
+	/**
+	 * Draw a text
+	 * @param pos		A StdDraw coord
+	 * @param fontSize	A absolute fontSize in px
+	 * @param c			The color of the text
+	 * @param msg		The text to show
+	 */
+	public void drawTextCenterAbsolute(Vec2 pos, int fontSize, Color c, String msg){
+		if(msg == null)
+			return;
+
+		StdDraw.setFont(new Font("Roboto", Font.PLAIN, fontSize));
+		StdDraw.setPenColor(c);
+		StdDraw.text(pos.x, pos.y, msg);
 	}
 	/**
 	 * Draw a text

@@ -5,6 +5,7 @@ import Warcraft.screen.textures.Texture;
 import Warcraft.tools.Vec2;
 import Warcraft.tools.Vec2i;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,7 +19,7 @@ public class PathRandom {
     private final List<Vec2i> path;
     private final Vec2i start;
     private final Screen screen;
-    private int cntDraw;
+    private int cntAdvancement;
 
     /**
      * @param size      the size x and y
@@ -27,8 +28,8 @@ public class PathRandom {
     public PathRandom(Vec2i size, Vec2i start, Screen screen){
         this.start = start;
         this.screen = screen;
-        cntDraw = 0;
         path = generate(size, start);
+        cntAdvancement = 0;
         
         drawPath();
     }
@@ -90,8 +91,6 @@ public class PathRandom {
 
         //Generate maze
         generate_int(tiles, start.div(2), 1);
-    
-        print(tiles);
 
         //Find longest path
         Vec2i max = getMax(tiles);
@@ -99,8 +98,10 @@ public class PathRandom {
 
         //Trace back the path from max to zero
         List<Vec2i> list = new ArrayList<>(goBack(tiles, max));
-        for(int i=0; i<list.size(); i++)
+        for(int i=0; i<list.size(); i++) {
             list.set(i, list.get(i).mul(-2)); // *2 for all
+            drawAdvancement((double)i/list.size(), "Inverting path");
+        }
 
         return list;
     }
@@ -138,6 +139,7 @@ public class PathRandom {
             Vec2i newCurrent = findNext(tiles, current);
             list.push(newCurrent.sub(current));
             current = newCurrent;
+            drawAdvancement((double)(tiles[max.y][max.x]-i)/tiles[max.y][max.x], "Finding longest path");
         }
         
         return list;
@@ -182,6 +184,8 @@ public class PathRandom {
             return;
 
         tiles[current.y][current.x] = n;
+        cntAdvancement++;
+        drawAdvancement((double)cntAdvancement/(tiles.length*tiles[0].length), "Generating maze");
         //drawMaze(tiles);
 
         //Search in all dir randomly
@@ -215,58 +219,6 @@ public class PathRandom {
     }
     
     /**
-     * Draw the animation at the creation of the maze used for the path
-     * @param tiles
-     */
-    private void drawMaze(int[][] tiles){
-        
-        if(tiles.length > 10 && cntDraw != tiles.length*10){
-            cntDraw++;
-            return;
-        }
-        cntDraw = 0;
-        
-        screen.clear();
-        for(int i=-1; i<tiles.length*2; i++){
-            for(int j=-1; j<tiles[0].length*2; j++){
-                Texture t = Texture.BACKGROUND;
-                Vec2i p = new Vec2i(j, i);
-                
-                
-                if(!(i == -1 || j == -1)) {
-                    if (i % 2 == 0 && j % 2 == 0 && tiles[i / 2][j / 2] != 0)
-                        t = Texture.PATH;
-                    else if (j % 2 == 1 && i % 2 == 0) {
-                        //Check up down
-                        if (j / 2 < tiles[0].length - 1) {
-                            int a = tiles[i / 2][j / 2];
-                            if (a != 0) {
-                                int b = tiles[i / 2][j / 2 + 1];
-                                if (Math.abs(a - b) == 1)
-                                    t = Texture.PATH;
-                            }
-                        }
-                    } else if (i % 2 == 1 && j % 2 == 0) {
-                        //Check left right
-                        if (i / 2 < tiles.length - 1) {
-                            int a = tiles[i / 2][j / 2];
-                            if (a != 0) {
-                                int b = tiles[i / 2 + 1][j / 2];
-                                if (Math.abs(a - b) == 1)
-                                    t = Texture.PATH;
-                            }
-                        }
-        
-                    }
-                }
-                
-                t.draw(screen, new Vec2(p.add(1)), 1, 0);
-            }
-        }
-        screen.render();
-    }
-    
-    /**
      * Draw the animation only for the path
      */
     private void drawPath(){
@@ -290,5 +242,14 @@ public class PathRandom {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void drawAdvancement(double percent, String name){
+        screen.clear();
+        screen.fill(Color.black);
+        screen.drawTextCenterAbsolute(new Vec2(.5, .55), 20, Color.white, name);
+        screen.drawTextCenterAbsolute(new Vec2(.5, .45), 20, Color.white, String.valueOf((int)(percent*100)));
+        screen.drawProgressBarAbsolute(new Vec2(.5, .5), new Vec2(.45, .01), percent, Color.white);
+        screen.render();
     }
 }
