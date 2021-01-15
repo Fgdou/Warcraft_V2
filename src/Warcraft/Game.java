@@ -9,6 +9,7 @@ import Warcraft.tools.Vec2;
 import Warcraft.tools.Vec2i;
 import Warcraft.ui.UiGame;
 
+import javax.swing.*;
 import java.awt.*;
 
 /**
@@ -32,7 +33,22 @@ public class Game {
 	 * Create the game
 	 */
 	public Game() {
-		screen = new Screen(new Vec2i(1000, 800), 10);
+
+		int nTiles;
+		while(true) {
+			try {
+				String input = JOptionPane.showInputDialog("Number of x tiles (default: 10)");
+				if(input.isEmpty())
+					nTiles = 10;
+				else
+					nTiles = Integer.parseInt(input);
+				break;
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, "Please input a valid number");
+			}
+		}
+
+		screen = new Screen(new Vec2i(1900, 1000),  nTiles);
 		inputHandler = new InputHandler(screen);
 		
 		PathRandom path = new PathRandom(screen.getnTiles(), new Vec2i(1,1), screen);
@@ -64,6 +80,10 @@ public class Game {
 	 * Launch the game, but wait for pressing S
 	 */
 	public void run(){
+
+		showMessage("The game will start");
+		level.start();
+
 		long time = System.nanoTime();
 		long lastTime = time;
 		long lastTimeRate = time;
@@ -75,8 +95,6 @@ public class Game {
 
 		//Time for 1 frame
 		final int delta = 1000000000 / TICK_RATE;
-
-		showMessage("Press S to Start");
 
 		while(running){
 			time = System.nanoTime();

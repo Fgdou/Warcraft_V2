@@ -139,7 +139,7 @@ public class PathRandom {
             Vec2i newCurrent = findNext(tiles, current);
             list.push(newCurrent.sub(current));
             current = newCurrent;
-            drawAdvancement((double)(tiles[max.y][max.x]-i)/tiles[max.y][max.x], "Finding longest path");
+            drawAdvancement((double)(i)/tiles[max.y][max.x], "Finding longest path");
         }
         
         return list;
