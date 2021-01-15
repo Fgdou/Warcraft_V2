@@ -28,6 +28,7 @@ public class Game {
 	private final InputHandler inputHandler;
 
 	private boolean running;
+	private boolean debug = false;
 
 	/**
 	 * Create the game
@@ -48,7 +49,7 @@ public class Game {
 			}
 		}
 
-		screen = new Screen(new Vec2i(1900, 1000),  nTiles);
+		screen = new Screen(new Vec2i(1000, 800),  nTiles);
 		inputHandler = new InputHandler(screen);
 		
 		PathRandom path = new PathRandom(screen.getnTiles(), new Vec2i(1,1), screen);
@@ -64,6 +65,10 @@ public class Game {
 	 */
 	private void tick(){
 		inputHandler.tick();
+
+		if(inputHandler.getKey('d'))
+			debug = !debug;
+
 		uiGame.update();
 		level.tick();
 	}
@@ -121,8 +126,11 @@ public class Game {
 				countFps = 0;
 				countTps = 0;
 			}
-			screen.drawTextLeftAbsolute(new Vec2(0, 0.98), 20, Color.black, "Tps: " + lastCountTps);
-			screen.drawTextLeftAbsolute(new Vec2(0, 0.95), 20, Color.black, "Fps: " + lastCountFps);
+			if(debug) {
+				screen.drawFilledRectangleAbsolute(new Vec2(.05, .965), new Vec2(.05, .035), new Color(0, 0, 0, 175));
+				screen.drawTextLeftAbsolute(new Vec2(0.01, 0.98), 20, Color.white, "Tps: " + lastCountTps);
+				screen.drawTextLeftAbsolute(new Vec2(0.01, 0.95), 20, Color.white, "Fps: " + lastCountFps);
+			}
 
 			screen.render();
 
@@ -130,6 +138,7 @@ public class Game {
 				running = false;
 		}
 		showMessage("Wasted...");
+
 	}
 
 	/**
@@ -152,7 +161,7 @@ public class Game {
 		screen.render();
 
 		try {
-			Thread.sleep(2000);
+			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
