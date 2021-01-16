@@ -10,10 +10,9 @@ boss 1 1
 IronGolem
 
 wave 10 60
-Phamtom
+Phantom
 
 wave 50 40
-Phamtom
 
 boss 2 600
 Llama
@@ -22,7 +21,6 @@ wave 20 40
 EnderMan
 
 wave 50 30
-EnderMan
 
 wave 200 20
 

@@ -38,9 +38,9 @@ public class Game {
 		int nTiles;
 		while(true) {
 			try {
-				String input = JOptionPane.showInputDialog("Number of x tiles (default: 10)");
+				String input = JOptionPane.showInputDialog("Number of x tiles (default: 11)");
 				if(input.isEmpty())
-					nTiles = 10;
+					nTiles = 11;
 				else
 					nTiles = Integer.parseInt(input);
 				break;
@@ -52,7 +52,7 @@ public class Game {
 		screen = new Screen(new Vec2i(1000, 800),  nTiles);
 		inputHandler = new InputHandler(screen);
 		
-		PathRandom path = new PathRandom(screen.getnTiles(), new Vec2i(1,1), screen);
+		PathRandom path = new PathRandom(screen.getnTiles(), new Vec2i(1,screen.getnTiles().y-1), screen);
 		Wave wave = new Wave("assets/levels/level1.txt");
 		level = new Level(screen, inputHandler, path, wave);
 		
@@ -66,8 +66,10 @@ public class Game {
 	private void tick(){
 		inputHandler.tick();
 
-		if(inputHandler.getKey('d'))
+		if(inputHandler.getKey('d')) {
 			debug = !debug;
+			uiGame.setDebug(debug);
+		}
 
 		uiGame.update();
 		level.tick();
@@ -127,9 +129,11 @@ public class Game {
 				countTps = 0;
 			}
 			if(debug) {
-				screen.drawFilledRectangleAbsolute(new Vec2(.05, .965), new Vec2(.05, .035), new Color(0, 0, 0, 175));
-				screen.drawTextLeftAbsolute(new Vec2(0.01, 0.98), 20, Color.white, "Tps: " + lastCountTps);
-				screen.drawTextLeftAbsolute(new Vec2(0.01, 0.95), 20, Color.white, "Fps: " + lastCountFps);
+				screen.drawFilledRectangleAbsolute(new Vec2(.07, .94), new Vec2(.07, .06), new Color(0, 0, 0, 175));
+				screen.drawTextLeftAbsolute(new Vec2(.01, .98), 20, Color.white, "Tps     : " + lastCountTps);
+				screen.drawTextLeftAbsolute(new Vec2(.01, .95), 20, Color.white, "Fps     : " + lastCountFps);
+				screen.drawTextLeftAbsolute(new Vec2(.01, .92), 20, Color.white, "Monsters: " + level.cntMonsters());
+				screen.drawTextLeftAbsolute(new Vec2(.01, .89), 20, Color.white, "Entities: " + level.cntEntities());
 			}
 
 			screen.render();

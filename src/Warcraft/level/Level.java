@@ -16,6 +16,15 @@ import java.util.*;
 import java.util.List;
 
 public class Level {
+
+	/**
+	 * Add lives to the player (only for debug)
+	 * @param i number of lives
+	 */
+	public void addLives(int i) {
+		lives+=i;
+	}
+
 	public enum Tiles{
 		EMPTY,
 		PATH,
@@ -335,6 +344,20 @@ public class Level {
 				continue;
 			m.onInteract(cloth, this);
 		}
+	}
+
+	/**
+	 * Kill all the monsters
+	 */
+	public void killMonsters() {
+		monsters.clear();
+	}
+
+	public int cntMonsters(){
+		return monsters.size();
+	}
+	public int cntEntities(){
+		return entities.size();
 	}
 
 	/**

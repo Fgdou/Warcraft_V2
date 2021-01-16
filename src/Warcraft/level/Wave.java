@@ -126,4 +126,10 @@ public class Wave {
     public boolean isWaitingNextWave() {
         return (startWave && monster == 0);
     }
+
+    public void nextWave() {
+        wave++;
+        monster = 0;
+        time = 0;
+    }
 }

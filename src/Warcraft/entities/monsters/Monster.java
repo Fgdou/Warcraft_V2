@@ -164,10 +164,12 @@ public abstract class Monster extends Entity {
                 return new EnderMan();
             case "Llama":
                 return new Llama();
-            case "Phamtom":
+            case "Phantom":
                 return new Phantom();
             default:
-                return null;
+                String[] names = {"Zombie", "Bat", "IronGolem", "EnderMan", "Llama", "Phantom"};
+                int n = (int)(Math.random()* names.length);
+                return getByName(names[n]);
         }
     }
 

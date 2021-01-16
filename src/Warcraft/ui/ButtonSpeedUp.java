@@ -15,7 +15,7 @@ public class ButtonSpeedUp extends ButtonCircle {
     public void onMouseDown(Level level) {
         super.onMouseDown(level);
 
-        level.setSpeed(10);
+        level.setSpeed(20);
     }
 
     @Override
